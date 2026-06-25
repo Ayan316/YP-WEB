@@ -1,0 +1,8 @@
+{
+  "career_status_choices": [
+    { "id": 0, "name": "At school / college" },
+    { "id": 2, "name": "At university" },
+    { "id": 3, "name": "Taking a gap year" },
+    { "id": 4, "name": "Finished education and actively looking for work" }
+  ]
+}

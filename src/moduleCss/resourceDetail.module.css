@@ -1,0 +1,2277 @@
+/* ───────────────────────────────────────────────────────────────
+   Resource detail — 1:1 port of `event-details.html`.
+   Chrome (navbar, theme tokens) is shared with the list page; this
+   file owns: page-bg override (HTML mockup palette), scrollable
+   detail layout, top-zone (detail-head + detail-side), slider,
+   article body, all per the HTML.
+   ─────────────────────────────────────────────────────────────── */
+
+/* ── Page-background override (slate gradient light / navy radial dark).
+   Keeps the chrome's viewport-locked `.page` (position: fixed; inset: 0;
+   overflow: hidden) so the browser-level scrollbar is suppressed — the
+   inner `.detail` container owns the scroll (with a custom thumb that
+   matches /events/[id] + /jobs/[id]). */
+.resourcesDetailPage.resourcesDetailPage {
+  background-color: #ffffff;
+  background-image: linear-gradient(
+    160deg,
+    #ffffff 0%,
+    #f8fafc 55%,
+    #f1f5f9 100%
+  );
+}
+[data-theme="dark"] .resourcesDetailPage.resourcesDetailPage,
+.resourcesDetailPage.resourcesDetailPage[data-theme="dark"] {
+  background-color: #03060e;
+  background-image: radial-gradient(
+    120% 110% at 88% 8%,
+    #17386a 0%,
+    #0d1d36 26%,
+    #070f1f 52%,
+    #03060e 100%
+  );
+}
+
+/* ── HTML mockup tokens (slate light / navy dark) ── */
+.resourcesDetailPage {
+  --font-display: var(--font-alumni-sans-sc), 'Alumni Sans SC', sans-serif;
+  --font-head: var(--font-plus-jakarta-sans), 'Plus Jakarta Sans', sans-serif;
+  --font-body: var(--font-dm-sans), 'DM Sans', sans-serif;
+
+  --ink: #0f172b;
+  --muted: #62748e;
+  --line: #e2e8f0;
+  --card-border: #cbd5e1;
+  --card-border-hover: #aab6c8;
+  --blue: #155dfc;
+  --chip-bg: #eff6ff;
+  --surface: #ffffff;
+  --surface-hover: #f1f5f9;
+  --media-bg: #eef2f7;
+  --scrollbar: #d4dbe6;
+  --reading: #334155;
+  --brand-grad: linear-gradient(90deg, #2563eb 0%, #20bdff 100%);
+  --avatar-grad: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  --outline-grad: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+}
+[data-theme="dark"] .resourcesDetailPage,
+.resourcesDetailPage[data-theme="dark"] {
+  --ink: #f8fafc;
+  --muted: #90a1b9;
+  --line: rgba(255, 255, 255, 0.10);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --card-border-hover: rgba(255, 255, 255, 0.30);
+  --blue: #5b8cff;
+  --chip-bg: rgba(91, 140, 255, 0.16);
+  --surface: #0f172b;
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  --media-bg: #1e293b;
+  --scrollbar: rgba(255, 255, 255, 0.18);
+  --reading: #cbd5e1;
+}
+
+/* ── Main scroll container — flex-fills the viewport beneath the
+   global Navbar. Outer dimensions (max-width, side padding,
+   responsive breakpoints) match /events/[id] + /jobs/[id] EXACTLY
+   so the top-left corner of the page content sits at the same X/Y
+   on every viewport. Custom scrollbar also matches those pages. */
+.detail {
+  flex: 1;
+  width: 100%;
+  max-width: 1590px;
+  margin: 0 auto;
+  padding: 21px 202px 30px;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+/* (Responsive media-query block lives at the end of this file so it
+   wins the cascade over the base rules below — CSS source order
+   matters at the same specificity. The block was originally here
+   but base rules later in the file were overriding it.) */
+.detail::-webkit-scrollbar { width: 6.1px; }
+.detail::-webkit-scrollbar-track { background: transparent; }
+.detail::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 4px;
+}
+.detail::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+[data-theme="light"] .detail::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.22);
+}
+[data-theme="light"] .detail::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.4);
+}
+
+/* Inner wrap is a pass-through now — `.detail` owns max-width +
+   padding to match events/jobs. `max-width: 100%` so a child with
+   intrinsic width (e.g. a wide image inside the article body) can't
+   push the page horizontally on narrow viewports. */
+.wrap {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* ── Back link ──
+   Text styling per user spec (verbatim from the live YP
+   `event_details_heading` class):
+     font-family: var(--font-plus-jakarta-sans);
+     margin: 0;
+     font-size: 20px;
+     font-weight: 600;
+   Icon is the exact Material UI `ArrowBack` glyph the user pasted
+   (viewBox 0 0 24 24, fill currentColor, intrinsic size 22px). */
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-plus-jakarta-sans), 'Plus Jakarta Sans', sans-serif;
+  /* Bottom margin trimmed 36 → 18 per user "gap between
+     Resource Details heading and the container needs to be
+     decreased" spec. The back link's own position (top + left)
+     is unchanged — only the space BELOW it shrinks. */
+  margin: 0 0 18px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+}
+/* No hover / active feedback per user spec — the button stays the
+   same colour on hover, no arrow slide, no opacity dip. It's still
+   clickable (cursor: pointer above) and triggers the back navigation,
+   it just doesn't visually react. */
+.backLink svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  flex: none;
+}
+
+/* ── Detail head card — FULL WIDTH info card under the banner.
+   Vertical padding bumped 18 → 26 per user "increase the height a
+   little" spec. `align-items: stretch` on `.dhTop` means the YP
+   logo column grows to match this taller content area, so the
+   chip→title→source rhythm gets more breathing room without any
+   gap edits. `width: 100%` + `box-sizing: border-box` prevents
+   horizontal overflow on narrow viewports. */
+.detailHead {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  /* OUTER common container wrapping the bannerCard + YP/title/chips
+     block as a single grouped card per user spec. Border visible,
+     background transparent (so the page bg flows through). The
+     bannerCard inside KEEPS its own border (nested card pattern). */
+  padding: 22px;
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  background: transparent;
+  overflow: visible;
+}
+
+/* "Published by Young Professionals UK" — RESTORED per user
+   request. Sits between the title and the chips row inside the
+   `.dhInfo` column. The YP square logo is also visible (it's
+   never hidden). */
+
+/* Inner padding for the YP-logo + title + source + chips block
+   lives on the existing `.dhTop` rule below (`padding: 24px 22px
+   26px`). The banner sits ABOVE this in the card without any
+   extra padding, so it spans the full card width. */
+
+/* `align-items: stretch` so the YP logo column expands vertically
+   to match the dhInfo content (chip → title → source line). The
+   logo's top edge sits at the top of the chip; its bottom edge
+   sits at the bottom of the source row — exactly per user spec. */
+.dhTop {
+  display: flex;
+  align-items: stretch;
+  gap: 18px;
+  min-width: 0;
+  /* No padding — `.dhTop` is no longer inside a bordered card.
+     It's just the title + chips block sitting below the banner.
+     Spacing from the banner above is handled by `.bannerCard
+     { margin-bottom: 26px }`. */
+  padding: 0;
+}
+
+/* Logo width bumped to 110px (was 84px) per user spec — gives the
+   YP square a more substantial presence next to the title block.
+   `height: auto` + `align-self: stretch` makes it match the dhInfo
+   column's height so its top/bottom edges align with chip top and
+   source-row bottom. */
+.dhLogo {
+  /* HIDDEN per user "remove the YP square box" spec. JSX stays
+     so the data path / accessibility tree are unchanged — flip
+     `display: none` back to `flex` (and the original size rules
+     below cascade in) to restore. The small circular
+     `.dhSourceAvatar` next to "Published by" is the brand mark
+     now. */
+  display: none;
+  width: 110px;
+  min-height: 105px;
+  height: auto;
+  align-self: stretch;
+  border-radius: 18px;
+  flex: none;
+  background: var(--avatar-grad);
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 36px;
+  letter-spacing: 1px;
+}
+
+.dhInfo {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.catChip {
+  /* `margin-bottom: 8px` removed (was needed when the chip sat
+     above the title); now lives in `.dhChipsRow` flex container
+     so the row's `gap` handles the spacing. */
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  font-family: var(--font-head);
+  /* Text size bumped 12 → 14 per user "increase Career Starter
+     Kit text size" spec. Border-radius trimmed 20 → 14 ("decrease
+     a little not much") so the pill keeps its rounded shape but
+     reads as a slightly less oval / more rectangular tag. */
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--blue);
+  background: var(--chip-bg);
+  padding: 6px 13px;
+  border-radius: 14px;
+}
+
+/* Chip row — category chip FIRST + date chip SECOND. Now sits at
+   the TOP of `.dhInfo` (above the title) per user spec. Margin
+   below to separate from the title line under it. Wraps to two
+   lines on narrow widths to keep both chips readable. */
+.dhChipsRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  /* No margin — chips row is now the LAST element in `.dhInfo`,
+     and the gap above (between title and chips) is owned by the
+     title's `margin-bottom` instead. */
+  margin: 0;
+}
+
+.detailHead h1 {
+  font-family: var(--font-head);
+  /* Bottom margin trimmed 22 → 10 per user "decrease the gap
+     between title and chips" spec. Title's OWN position (top
+     edge) is unchanged — only the chips row pulls UP. */
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.26;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.dhSource {
+  /* Sits at the TOP-LEFT of `.detailHead`, above the inner
+     banner card. `align-self: flex-start` keeps it on the left
+     side of the column. The small avatar circle + text stay
+     on one line via `inline-flex`. Bottom margin keeps the gap
+     before the bannerCard. */
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 14px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
+}
+
+/* Small circular YP avatar that sits BEFORE the "Published by"
+   text inside `.dhSource`. Same brand gradient as the bigger
+   `.dhLogo` square but rendered as a 24px circle so it reads as
+   a tiny inline brand mark next to the source line. */
+.dhSourceAvatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--avatar-grad);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  /* User-select prevents the "YP" letters inside being
+     accidentally selected when the user is selecting the source
+     text around it. */
+  user-select: none;
+}
+
+/* Row that pairs "Published by …" text with the date chip side-by-side
+   (chip lives to the RIGHT of the source line, not below it per
+   user spec). `margin: 0` so the row sits flush with the card's
+   bottom padding — keeps the YP logo's bottom edge aligned with
+   the bottom of this row. */
+.dhSourceRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+}
+
+/* Chip row sits INSIDE `.dhSourceRow` (to the RIGHT of "Published by")
+   so the date chip is beside the source line, not below it. */
+.dhChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 0;
+}
+
+.metaChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-head);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--surface-hover);
+  border: 1px solid var(--line);
+  padding: 5px 11px;
+  border-radius: 20px;
+}
+.metaChip svg { width: 13px; height: 13px; color: var(--blue); flex: none; }
+
+/* ── Banner card — STANDALONE bordered card containing the
+   audio player. Per user reference SS: the bordered card is
+   JUST the banner area (with the audio widget inside); the
+   title + chips block sits BELOW the card with no border of
+   its own. */
+.bannerCard {
+  position: relative;
+  width: 100%;
+  /* Taller banner per user spec (was 380px; trimmed 430 → 410). */
+  height: 410px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--media-bg);
+  border: 1px solid var(--card-border);
+  margin-bottom: 26px;
+}
+
+/* ── Banner media (audio / video / pdf) — rendered INSIDE
+   `.bannerCard` when there are no image slides but the resource
+   DOES have non-image media. Keeps the page structure consistent
+   while giving users an actual way to access the media instead of
+   just showing the title placeholder. ── */
+
+/* Shared centered column used by audio + pdf variants (video fills
+   the whole banner without this wrap). */
+.bannerMediaWrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 32px;
+  background-image: linear-gradient(135deg, #1f3a73 0%, #1a2b54 45%, #0f1c33 100%);
+  text-align: center;
+}
+[data-theme="light"] .bannerMediaWrap {
+  background-image: linear-gradient(135deg, #6a8cff 0%, #4c6dd9 50%, #2b3f99 100%);
+}
+
+/* Title above the media controls — slightly smaller than the
+   bannerPlaceholder title so the player has room to breathe. */
+.bannerMediaTitle {
+  font-family: var(--font-plus-jakarta-sans), sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.25;
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  margin: 0;
+  max-width: 80%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Audio element — native `<audio controls>`. Browser default UI is
+   fine but the default width is narrow, so we stretch to ~80% of
+   the banner's width. Kept for legacy fallback; the new custom
+   `.audioPlayer` widget below is the primary surface. */
+.bannerAudio {
+  width: 100%;
+  max-width: 480px;
+  display: block;
+}
+
+/* ── Custom audio player widget — replaces the native audio strip
+   on the banner audio slide per user reference SS. Dark-glass
+   rounded card with the play button on the LEFT and the label /
+   waveform / time block on the RIGHT. */
+/* Player widget — COLUMN layout. Height trimmed (smaller padding
+   + gap) per user "reduce the whole audio box height" spec.
+   max-width bumped 460 → 520 to compensate for the shorter
+   container ("you can increase the width to compensate"). */
+.audioPlayer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  /* Top padding bumped (12 → 16) and bottom trimmed (12 → 8) per
+     user spec — taller top gap, shorter bottom edge. */
+  padding: 16px 20px 8px;
+  background: rgba(15, 23, 43, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.4);
+}
+
+/* Bottom row — `0:00 [▶ play] 1:17` on a single row. `space-between`
+   pushes the time labels to the edges with the play button
+   centred via flex auto-centering. */
+.audioBottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  /* Width + centring MATCH `.audioProgressBar` (86% / margin auto)
+     so `0:00` lines up with the bar's START and the duration lines
+     up with the bar's END, per user spec. Previously the row was
+     full-width while the bar was 86%, so the times sat ~7% outside
+     each end of the line. The negative top margin trims the gap
+     between the progress line and this row a little (the column
+     gap is 6px → net ~3px). */
+  width: 86%;
+  margin: -3px auto 0;
+}
+
+/* Time labels in the bottom row — same font / sizing as the
+   previous `.audioTime` labels. `font-variant-numeric:
+   tabular-nums` keeps the digits visually steady as time ticks. */
+.audioBottomTime {
+  color: rgba(255, 255, 255, 0.72);
+  font-family: var(--font-plus-jakarta-sans), 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Top row — music box (LEFT) + label+waveform column (RIGHT).
+   `align-items: center` vertically centers both columns inside
+   the row, so the music box (76px fixed) sits in the optical
+   middle of the taller right column. The whole inner content
+   then has equal top/bottom space inside the player container
+   per user "needs to be positioned center of audio box — equal
+   top + bottom gap" spec. */
+.audioTopRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Label + waveform stacked column on the RIGHT side of audioTopRow. */
+.audioLabelWaveform {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* Gap trimmed 12 → 6 per user "this gap needs to reduce"
+     spec — tighter vertical rhythm between label / waveform /
+     progress bar / bottom row. */
+  gap: 6px;
+  min-width: 0;
+}
+
+/* Music-note circle — LEFT of `.audioTopRow`. EXACT CSS port of
+   the user-pasted spec (76×76 circle, purple→cyan linear
+   gradient, blue drop shadow, cursor pointer, inline-flex
+   centred). The faded double-note watermark is layered as a
+   background image on top of the gradient — alpha bumped to 0.65
+   per user "inner ♪♪ should be more white" spec. */
+.audioMusicBox {
+  cursor: pointer;
+  color: #fff;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-opacity='0.65' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M9 18V5l12-2v13'/><circle cx='6' cy='18' r='3' fill='%23ffffff' fill-opacity='0.65'/><circle cx='18' cy='16' r='3' fill='%23ffffff' fill-opacity='0.65'/></svg>") no-repeat center / 50% auto,
+    linear-gradient(135deg, #5433ff 0%, #23b8ff 100%);
+  border: none;
+  /* Full CIRCLE per user spec (the audio box is round again). */
+  border-radius: 50%;
+  flex: none;
+  justify-content: center;
+  align-items: center;
+  width: 76px;
+  height: 76px;
+  transition: filter 0.15s, transform 0.15s;
+  display: inline-flex;
+  box-shadow: 0 12px 28px #2463eb73;
+}
+
+/* Blue circular play / pause button — radial gradient + soft cyan
+   shadow so it reads as a glowing affordance. Size bumped 62 →
+   78 per user "play button should increase in size" spec; SVG
+   bumped proportionally 22 → 28 so the glyph still fills the
+   same visual fraction of the button. */
+.audioPlayBtn {
+  /* Plain white play/pause icon, no bg. Size bumped 32 → 42
+     per user "make the play button size a little increased"
+     spec. */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  align-self: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: none !important;
+  background: transparent !important;
+  color: #ffffff;
+  outline: none !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  box-shadow: 0 10px 28px rgba(21, 93, 252, 0.55);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+/* Hover / focus / active — NO bg, NO shadow, NO blue highlight.
+   The previous `box-shadow: ... rgba(21, 93, 252, 0.7)` on
+   hover was painting a dark blue glow that read as a square
+   background behind the play icon. All gone. Only a subtle
+   `filter: brightness(1.15)` remains on hover so the icon still
+   reacts to the cursor without any colour or shape change. */
+.audioPlayBtn:hover {
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: brightness(1.15);
+}
+.audioPlayBtn:focus,
+.audioPlayBtn:focus-visible,
+.audioPlayBtn:active {
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.audioPlayBtn svg {
+  /* SVG scaled with the larger 42px button. */
+  width: 24px;
+  height: 24px;
+}
+.audioPlayBtn svg path { margin-left: 2px; }
+
+/* Right-hand block — label row + waveform + time row stacked. */
+.audioInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+/* "🎵 Audio" label above the waveform — icon bumped 16 → 22
+   (bigger leading glyph) + text trimmed 18 → 15 (slightly
+   smaller) per user spec. The icon now reads as the dominant
+   element with the text as a quieter caption beside it. */
+.audioLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-family: var(--font-plus-jakarta-sans), 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  /* Extra space below the label so the gap to the waveform below is
+     a little larger (adds to the column's 6px gap), per user spec. */
+  margin-bottom: 5px;
+}
+.audioLabel svg {
+  /* Reduced 22 → 16 and recoloured to the same blue as the type
+     chip, per user spec. The SVG path itself is unchanged in the
+     JSX. */
+  width: 16px;
+  height: 16px;
+  color: #5b8cff;
+  /* Per user-pasted media reset — block + middle-aligned so the
+     music-note glyph starts flush at the same left X as the first
+     waveform bar (both are the column's first inline edge). */
+  display: block;
+  vertical-align: middle;
+}
+
+/* Waveform — 60 vertical bars, equally-distributed via
+   `justify-content: space-between`. Each bar at a fixed 4px
+   width. More bars means tighter gaps in the same width (per
+   user "bars need to be closer" spec). Now a CLICKABLE seek
+   surface — `cursor: pointer` + JS handler `handleWaveformSeek`
+   converts the click X position to an audio.currentTime jump. */
+.audioWaveform {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Height trimmed 38 → 30 per user "audio bar height needs to
+     decrease" spec — shorter bars fit the smaller player widget. */
+  height: 30px;
+  width: 100%;
+  cursor: pointer;
+}
+.waveformBar {
+  /* Bar width bumped 2.5 → 4px per user "not that thin, exactly
+     same as SS" spec — medium-thick bars with rounded caps. */
+  flex: 0 0 4px;
+  /* UNPLAYED = dim "shadow" shade so the waveform reads as recessed
+     before / ahead of the playhead. */
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 2.5px;
+  /* Smooth colour swap as each bar flips to "played" while the audio
+     advances — drives the fill animation. */
+  transition: background 0.12s ease;
+}
+.waveformBarPlayed {
+  /* PLAYED = whitish sky-blue. The JS marks bars played up to the
+     current progress, so the waveform visibly fills left→right with
+     this colour as the audio plays, per user spec. */
+  background: rgba(201, 223, 255, 0.95);
+}
+
+/* Time row below the waveform — current time (left), thin
+   horizontal line (middle, fills remaining space), duration
+   (right). Grid `auto 1fr auto` so the middle cell stretches
+   no matter how the timestamps grow. */
+.audioTime {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: var(--font-plus-jakarta-sans), 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Orange progress bar with circular handle — replaces the
+   previous thin decorative line per user reference SS. Sits
+   in the middle column of `.audioTime` (auto 1fr auto grid)
+   so it stretches the full width between the two timestamps.
+   Three nested elements:
+     - `.audioProgressBar` — wrapper / click target / track
+     - `.audioProgressFill` — orange fill from 0 → current
+     - `.audioProgressHandle` — orange circle at the playhead */
+.audioProgressBar {
+  position: relative;
+  height: 3px;
+  /* Width trimmed further per user "needs more reduce" spec
+     (was 94 → now 86). Stays centred horizontally with
+     `margin: 0 auto` so the bar shortens equally from both
+     ends, staying centred under the waveform. `margin-top: 10px`
+     adds extra breathing room between the waveform above and
+     the progress bar — only THIS gap grows (the column gap
+     elsewhere stays at 6px). */
+  width: 86%;
+  margin: 10px auto 0;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 1.5px;
+  cursor: pointer;
+  /* Stop touch-drag from scrolling the page while the user slides
+     the handle (the JS drag is pointer-based). */
+  touch-action: none;
+}
+/* Invisible taller hit area so the thin 3px line is easy to grab +
+   drag. The `::before` is part of the bar for hit-testing, so a
+   press on it still fires the bar's pointer handler; it's
+   transparent and sits behind the fill/handle so nothing shows. */
+.audioProgressBar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -8px;
+  bottom: -8px;
+}
+.audioProgressFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  /* Orange → BLUE per user "orange dot/bar should be blue or
+     white matching the audio bar" spec. Uses the same #5b8cff
+     blue used on the music-box gradient endpoint area. */
+  background: #5b8cff;
+  border-radius: 1.5px;
+  pointer-events: none;
+}
+.audioProgressHandle {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  /* White handle — clean contrast against the blue fill,
+     matches the white play icon below. */
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 2px 6px rgba(91, 140, 255, 0.45);
+  pointer-events: none;
+}
+
+/* Light-theme override — keeps the same shape but slightly more
+   readable contrast on a lighter banner surface. */
+[data-theme="light"] .audioPlayer {
+  background: rgba(15, 23, 43, 0.75);
+}
+
+/* Video element — fills the whole banner area, preserving the
+   16:9 aspect of the source via `object-fit: contain`. */
+.bannerVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: block;
+}
+
+/* ── Custom video player (replaces native <video controls>) ──
+   Matches the user reference SS: dark navy surface fills the banner,
+   large centered play / pause flanked by skip-back-10 and
+   skip-forward-10, and a bottom bar with timestamps, white progress
+   track, speed cycle button, mute toggle, and fullscreen toggle. */
+.videoPlayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Pure BLACK so the letterbox/pillarbox space around a `contain`-
+     fitted video reads black — matches the live YP SS (was the dark
+     navy #050a18, which looked blue-tinted in the empty space). */
+  background: #000000;
+  overflow: hidden;
+  display: block;
+}
+.videoEl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Black behind the video element itself — this is what actually
+     fills the bars on the sides/top/bottom when the video's aspect
+     ratio doesn't match the banner box (`object-fit: contain`). */
+  background: #000000;
+  display: block;
+  object-fit: contain;
+  cursor: pointer;
+}
+/* Center cluster — skip-back / play / skip-forward. Vertically and
+   horizontally centered over the video; auto-hides 2.5s after the
+   cursor leaves while playing. */
+.videoCenterControls {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  z-index: 2;
+  pointer-events: auto;
+  opacity: 1;
+  transition: opacity 0.22s ease;
+}
+.videoPlayer:not(.videoPlayerActive) .videoCenterControls {
+  opacity: 0;
+  pointer-events: none;
+}
+.videoSkipBtn,
+.videoPlayBtn {
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.16s ease, transform 0.16s ease;
+}
+.videoSkipBtn {
+  width: 56px;
+  height: 56px;
+}
+.videoSkipBtn svg {
+  width: 36px;
+  height: 36px;
+}
+.videoPlayBtn {
+  width: 76px;
+  height: 76px;
+}
+/* Inner play / pause glyph — sized UP per user spec ("play button
+   svg inner need to increased size while the circle bg svg should
+   not change"). Circle stays 76×76; only the glyph grows. The play
+   triangle's visual center sits slightly right of its geometric
+   center, so a 2px nudge keeps it optically centered inside the
+   circle. */
+.videoPlayBtn svg {
+  width: 48px;
+  height: 48px;
+  margin-left: 3px;
+}
+.videoSkipBtn:hover,
+.videoPlayBtn:hover {
+  background: rgba(0, 0, 0, 0.78);
+  transform: scale(1.04);
+}
+.videoSkipBtn:active,
+.videoPlayBtn:active {
+  transform: scale(0.97);
+}
+/* Bottom bar — timestamps, progress, speed, mute, fullscreen.
+   Sits flush against the bottom of the player. Auto-hides while
+   playing if the cursor isn't moving (same trigger as the center
+   cluster). */
+.videoBottomBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  /* Tighter gap + padding so the whole control row reads as the
+     compact bar in the live YP SS (was gap 12 / padding 12px 18px). */
+  gap: 10px;
+  padding: 10px 16px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%);
+  z-index: 2;
+  opacity: 1;
+  transition: opacity 0.22s ease;
+}
+.videoPlayer:not(.videoPlayerActive) .videoBottomBar {
+  opacity: 0;
+  pointer-events: none;
+}
+.videoTime {
+  color: #ffffff;
+  font-family: var(--font-plus-jakarta-sans), sans-serif;
+  font-weight: 600;
+  /* Compact timestamp text to match the live SS (was 15px / 44px). */
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.2px;
+  min-width: 38px;
+  text-align: center;
+  user-select: none;
+}
+.videoProgress {
+  position: relative;
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.videoProgressFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: width 0.08s linear;
+}
+.videoProgressHandle {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+.videoSpeedBtn,
+.videoIconBtn {
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.14s ease, transform 0.14s ease;
+}
+.videoSpeedBtn {
+  font-family: var(--font-plus-jakarta-sans), sans-serif;
+  font-weight: 700;
+  /* Nudged up a little per user spec (13 → 15 / min 30 → 34). */
+  font-size: 15px;
+  min-width: 34px;
+}
+.videoIconBtn svg {
+  /* Mute / fullscreen glyphs nudged up a little (20 → 23). */
+  width: 23px;
+  height: 23px;
+}
+.videoSpeedBtn:hover,
+.videoIconBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.videoSpeedBtn:active,
+.videoIconBtn:active {
+  transform: scale(0.95);
+}
+/* Smaller screens — shrink the center cluster and trim the bottom-bar
+   gaps so everything fits the 280 / 220 banner heights. */
+@media (max-width: 880px) {
+  .videoCenterControls { gap: 24px; }
+  .videoSkipBtn { width: 48px; height: 48px; }
+  .videoSkipBtn svg { width: 30px; height: 30px; }
+  .videoPlayBtn { width: 64px; height: 64px; }
+  .videoPlayBtn svg { width: 30px; height: 30px; }
+  .videoBottomBar { padding: 10px 14px; gap: 10px; }
+}
+
+/* ── Tablet (641–880) — ONE-ROW control bar like the DESKTOP layout ──
+   The old full-width override + raised slider-nav (which forced a
+   TWO-ROW layout on tablet) are gone, so here the control bar falls
+   back to the JS-measured CENTRED video-width bar and the slider nav
+   `< >` sits in the bottom-right corner — BOTH on a SINGLE row, just
+   like the desktop web version. Sizes are trimmed so the whole row
+   fits the 280px tablet banner. */
+@media (min-width: 641px) and (max-width: 880px) {
+  .videoBottomBar { padding: 8px 12px; gap: 8px; }
+  .videoTime { font-size: 12px; min-width: 34px; }
+  .videoSpeedBtn { font-size: 13px; }
+  .videoIconBtn svg { width: 20px; height: 20px; }
+  .sliderArrow { width: 28px; height: 28px; }
+  .sliderArrow svg { width: 13px; height: 13px; }
+  .sliderDot { width: 6px; height: 6px; }
+  .sliderDotActive { width: 16px; }
+}
+@media (max-width: 640px) {
+  .videoCenterControls { gap: 18px; }
+  .videoSkipBtn { width: 42px; height: 42px; }
+  .videoSkipBtn svg { width: 26px; height: 26px; }
+  .videoPlayBtn { width: 56px; height: 56px; }
+  .videoPlayBtn svg { width: 26px; height: 26px; }
+  /* Mobile: control bar spans the FULL banner width (the centred
+     video-width bar is too narrow on phones) AND is RAISED to
+     bottom:44px so it sits ABOVE the slider nav — the `< >` row then
+     drops BELOW it (see `.sliderNavRaised` in the ≤640 slider block).
+     This SWAPS the two rows vs. the old layout. `!important` overrides
+     the JS-set inline left/right/width/transform. */
+  .videoBottomBar {
+    left: 0 !important;
+    right: 0 !important;
+    width: auto !important;
+    transform: none !important;
+    bottom: 44px;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .videoTime { font-size: 12px; min-width: 32px; }
+  .videoSpeedBtn { font-size: 12px; }
+  .videoIconBtn svg { width: 18px; height: 18px; }
+}
+
+/* ── Media-player section ──
+   Sits between the banner card and the info card. Renders when a
+   resource has audio / video / pdf media but no image slides.
+   Visually a self-contained block matching the other detail-page
+   cards (same border, same 16px radius, same surface tone) so it
+   reads as part of the stacked card sequence. */
+.mediaSection {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 22px;
+  padding: 18px 20px;
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+}
+/* Audio player — native controls, stretch to ~80% of the card. */
+.mediaAudio {
+  width: 100%;
+  max-width: 640px;
+  display: block;
+}
+/* Video player — fixed 16:9 aspect inside the section so a small
+   video doesn't render at a weird tiny size. */
+.mediaVideo {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 12px;
+  display: block;
+}
+
+/* PDF / document CTA — styled "Open document" button. Big and
+   tappable so it stands out as the resource's primary action. */
+/* OPEN PDF / OPEN DOCUMENT button — WHITE outer OVAL chip.
+   Right padding trimmed 28 → 14 per user "right side padding
+   from the sub chip right edge needs to reduce" spec — left
+   padding (36) unchanged. Outer chip still has NO hover
+   effects (only the inner chip zooms). */
+.bannerDocLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 14px 10px 36px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #1b2e59;
+  text-decoration: none;
+  font-family: var(--font-plus-jakarta-sans), sans-serif;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  /* Button reset — this is now a <button> (opens the preview modal)
+     instead of an <a>, so strip the native border + show the pointer
+     cursor. The white fill / shape above is unchanged. */
+  border: none;
+  cursor: pointer;
+}
+/* Outer chip itself does NOT respond to hover anymore — no
+   lift, no brightness flicker. Stays anchored. */
+.bannerDocLink:hover {
+  transform: none;
+  filter: none;
+}
+
+/* Document icon — DARK NAVY (`#1b2e59`) per user-specified
+   shade, no surrounding box. Sits naked inside the white outer
+   chip on the LEFT. Size unchanged per "svg remain same". */
+.bannerDocIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: #1b2e59;
+}
+.bannerDocIcon svg {
+  /* SVG bumped 20 → 26 per user "PDF icon size needs to be
+     increased" spec — bigger doc glyph inside the outer pill. */
+  width: 26px;
+  height: 26px;
+}
+
+/* Sub blue OVAL chip — bumped per user "sub oval shape blue
+   color bg chip" spec. Padding 9/18 → 12/26 + font 14 → 15 makes
+   the inner chip more pronounced. Faint blue bg + brand-blue
+   text. `border-radius: 999px` keeps the fully-rounded oval
+   pill shape. */
+.bannerDocLabel {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 18px;
+  border-radius: 999px;
+  /* Solid navy-blue shade per user spec — replaces the earlier
+     purple `#5433ff` with the darker `#0b3b81`. */
+  background: #0b3b81;
+  /* White text + transparent shadow to match the music-box
+     palette. */
+  color: #ffffff;
+  font-family: var(--font-plus-jakarta-sans), sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  /* Zoom in / zoom out on hover ONLY on the inner chip — the
+     outer chip stays pinned, just this blue pill scales up
+     when the cursor hovers the button. */
+  transition: transform 0.18s ease, filter 0.18s ease;
+  transform-origin: center;
+}
+/* Softer zoom on hover per user "needs to be a little less,
+   softer" spec — scale 1.06 → 1.025 and brightness 1.06 → 1.03
+   make the effect more subtle. Active press still small. */
+.bannerDocLink:hover .bannerDocLabel {
+  transform: scale(1.025);
+  filter: brightness(1.03);
+}
+.bannerDocLink:active .bannerDocLabel {
+  transform: scale(0.99);
+}
+
+/* Fallback placeholder rendered INSIDE `.bannerCard` when the
+   resource has no image media (e.g. an audio-only or pdf-only
+   resource). Matches the company-details / events-details / jobs-
+   details pattern — the banner box always renders so the page
+   structure stays consistent, and a gradient + the resource title
+   fills the empty area instead of an unsightly blank box. */
+.bannerPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(135deg, #1f3a73 0%, #1a2b54 45%, #0f1c33 100%);
+  font-family: var(--font-plus-jakarta-sans), sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  padding: 0 32px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+[data-theme="light"] .bannerPlaceholder {
+  background-image: linear-gradient(135deg, #6a8cff 0%, #4c6dd9 50%, #2b3f99 100%);
+  color: #ffffff;
+}
+
+/* Legacy alias — kept so the old inline-slider styling still works
+   if needed. The new banner card layout above is the primary surface. */
+.slider {
+  position: relative;
+  flex: none;
+  height: 380px;
+  margin-top: 18px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--media-bg);
+  border: 1px solid var(--card-border);
+}
+
+.sliderTrack {
+  display: flex;
+  height: 100%;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #03060e;
+}
+
+/* Each slide is a 2-layer composite:
+     - `.sliderBlur` sits behind, fills the box with a blurred,
+       slightly zoomed copy of the same image (driven by an inline
+       `background-image: url(...)`). This is the "halo" that fills
+       the letterbox / pillarbox area instead of a flat dark color.
+     - `.sliderImage` sits on top, shows the FULL image at natural
+       aspect (object-fit: contain) so the actual content is sharp.
+   Result mirrors the user's SS exactly — sharp logo in the centre,
+   blurred-out backdrop on the sides. */
+.sliderSlide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex: none;
+  overflow: hidden;
+  background: #03060e;
+}
+.sliderBlur {
+  position: absolute;
+  /* Slight outset so the blur radius doesn't reveal hard edges of
+     the underlying image as visible bands at the slide boundaries. */
+  inset: -28px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(28px) brightness(0.55);
+  /* Light scale so the blurred mass extends fully past the inset
+     even when the image's natural aspect is far from 16:9. */
+  transform: scale(1.08);
+  z-index: 0;
+}
+.sliderImage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  /* `contain` — full image at natural aspect, no crop, no upscale
+     haze. The blurred backdrop behind fills any letterbox area. */
+  object-fit: contain;
+  display: block;
+}
+
+/* Legacy: bare <img> children of `.sliderTrack` (kept so any code
+   path that still renders the old flat structure renders cleanly).
+   The new 2-layer slide structure above is the primary surface. */
+.sliderTrack > img {
+  width: 100%;
+  height: 100%;
+  flex: none;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── Media-type chip (top-left of each slide) ──
+   EXACT CSS the user pasted from the live element. Rendered once per
+   slide; the icon + label are filled DYNAMICALLY from the slide's
+   media type (VIDEO / AUDIO / PDF / DOCUMENT / IMAGE). */
+.mediaTypeChip {
+  position: absolute;
+  top: 16px;
+  /* Moved to the top-RIGHT corner per user spec (was left: 16px). */
+  right: 16px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  /* One step taller again per user spec (4 → 5 vertical). */
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #0000008c;
+  border: 1px solid #ffffff24;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  font-family: var(--font-plus-jakarta-sans), 'Plus Jakarta Sans', sans-serif;
+  /* Label text trimmed 12 → 11 + vertical padding trimmed 6 → 4 so
+     the chip sits a little shorter, per user spec. */
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.mediaTypeChip svg {
+  width: 14px;
+  height: 14px;
+  /* Icon is BLUE while the label text stays white, per user spec
+     (the stroke inherits this `color` via `currentColor`). */
+  color: #5b8cff;
+}
+
+.sliderNav {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sliderDots {
+  display: flex;
+  gap: 6px;
+  margin-right: 4px;
+}
+
+.sliderDot {
+  /* Slightly smaller per user spec (7 → 6). */
+  width: 6px;
+  height: 6px;
+  border: none;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: 0.2s;
+}
+.sliderDotActive {
+  background: #fff;
+  /* Active dash trimmed 20 → 16 to track the smaller dots. */
+  width: 16px;
+  border-radius: 4px;
+}
+
+.sliderArrow {
+  /* Reduced a little per user spec (38 → 33). */
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.94);
+  color: #0f172b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(2, 6, 24, 0.28);
+  transition: background 0.15s, transform 0.15s;
+}
+.sliderArrow:hover:not(:disabled) {
+  background: #fff;
+  transform: scale(1.07);
+}
+.sliderArrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.sliderArrow svg { width: 15px; height: 15px; }
+
+/* ── Thumbnail strip (below the banner) ──
+   One thumb per slide, in backend order. Image slides show their
+   cover; audio / video / pdf / document show a per-type glyph. The
+   active slide's thumb gets the cyan ring. Only rendered (in the
+   JSX) when there are 2+ media items. The `.bannerCard` above ships
+   a 26px bottom margin, so a small negative top margin tightens the
+   banner↔strip gap toward the live YP look. */
+.thumbStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  /* Tighter banner↔strip gap per user spec — the `.bannerCard`
+     above ships a 26px bottom margin, so a larger negative top
+     margin (-8 → -16) pulls the strip up closer to the banner. */
+  margin: -16px 0 22px;
+}
+.thumbBtn {
+  flex: 0 0 auto;
+  /* Small ROUNDED SQUARE per user spec (not a circle). Equal
+     width/height + a modest corner radius. Reduced further to
+     52×52. The image-cover thumb is clipped to the rounded square
+     by `overflow: hidden` below. */
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 12px;
+  /* Inactive boxes have NO border per user spec — just the faint
+     fill below. The active box adds its own cyan border. */
+  border: none;
+  background: rgba(255, 255, 255, 0.04);
+  /* Icon colour — a DECENT, visible muted blue (between the bright
+     #5b8cff and the too-dull #6b80a6) per user spec. Same on active
+     + inactive (active only changes the border). */
+  color: #7e93bd;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+.thumbBtn:hover {
+  /* Inactive boxes stay border-less; hover just lifts + brightens
+     the fill (no border affordance, per the "inactive border none"
+     spec). */
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+.thumbBtnActive {
+  /* Active box is the ONLY one with a border — moderate-weight cyan
+     ring. Background fill + inner glyph colour stay identical to the
+     inactive state. `box-sizing: border-box` (global) keeps the box
+     at 52×52 so nothing shifts. */
+  border: 2px solid #20bdff;
+}
+/* Image-cover thumb fills the button edge to edge. */
+.thumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Glyph thumb — centered icon at ~26px. */
+.thumbIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.thumbIcon svg {
+  /* A little smaller (26 → 22) + lighter "medium ~500" stroke. The
+     CSS `stroke-width` overrides the SVG's inline stroke-width="2"
+     presentation attribute (author CSS beats presentation attrs). */
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.7;
+}
+/* Light-theme surfaces — dark fills are invisible on the white page,
+   so flip to soft dark-on-white. Active ring stays cyan in both. */
+[data-theme="light"] .thumbBtn {
+  border-color: rgba(15, 23, 42, 0.12);
+  background: rgba(15, 23, 42, 0.03);
+  /* Decent, visible muted blue to match the dark-theme icon tone. */
+  color: #5f7194;
+}
+[data-theme="light"] .thumbBtnActive {
+  /* Light theme — same rule: only the active box gets the cyan
+     border; glyph + background unchanged. */
+  border: 2px solid #20bdff;
+}
+
+/* Smaller screens — shrink the thumbs so a full strip still fits. */
+@media (max-width: 640px) {
+  /* ≤640: banner bottom margin is 14, so -2 keeps the gap ~12px. */
+  .thumbStrip { gap: 9px; margin: -2px 0 18px; }
+  .thumbBtn { width: 44px; height: 44px; border-radius: 10px; }
+  .thumbIcon svg { width: 20px; height: 20px; }
+}
+
+/* ── Detail side (RIGHT — Details + Share boxes) ── */
+.detailSide {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.detailSide .sideBox:nth-child(1) { flex: 1.7 1 0; }
+.detailSide .sideBox:nth-child(2) { flex: 1 1 0; }
+.sideBox {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 22px;
+  background: transparent;
+}
+.sideBox h3 {
+  font-family: var(--font-head);
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sideRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  font-size: 14px;
+  border-top: 1px solid var(--line);
+}
+.sideRow:first-of-type { border-top: none; }
+.sideKey { color: var(--muted); }
+.sideVal {
+  color: var(--ink);
+  font-weight: 600;
+  text-align: right;
+  font-family: var(--font-head);
+}
+
+.sideActions {
+  margin-top: auto;
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--brand-grad);
+  padding: 17px 24px;
+  border-radius: 26px;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.30);
+  transition: filter 0.15s;
+  width: 100%;
+}
+.btnPrimary:hover { filter: brightness(1.06); }
+.btnPrimary svg { width: 15px; height: 15px; }
+
+.btnOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  background: transparent;
+  border: 1.5px solid var(--card-border);
+  padding: 17px 24px;
+  border-radius: 26px;
+  width: 100%;
+  transition: border-color 0.15s, background 0.15s;
+}
+.btnOutline:hover { border-color: var(--blue); }
+.btnOutline svg { width: 15px; height: 15px; flex: none; }
+[data-theme="dark"] .btnOutline {
+  border: 1.6px solid transparent;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box,
+              var(--outline-grad) border-box;
+}
+
+/* Share stack */
+.shareStack {
+  flex: 1;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.shareItem {
+  flex: 1;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0 20px;
+  cursor: pointer;
+  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 600;
+  transition: border-color 0.15s, background 0.15s;
+}
+.shareItem:hover { border-color: var(--blue); }
+[data-theme="dark"] .shareItem:hover { background: var(--surface-hover); }
+.shareItem svg { width: 21px; height: 21px; flex: none; }
+
+/* ── Article body ──
+   Wrapped in its own bordered card to match the info card above —
+   same border colour, same 20px radius, similar padding. Reads as
+   a third stacked block (banner → info → article). `width: 100%`
+   + `box-sizing: border-box` prevents horizontal overflow on
+   small viewports. */
+.detailMain {
+  width: 100%;
+  box-sizing: border-box;
+  scroll-margin-top: 95px;
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 24px 28px;
+  background: transparent;
+  /* NO inner scroll / height cap — the container GROWS to fit the
+     full description, however long. The page's own scroll (`.detail`,
+     the screen right-edge scrollbar) handles overflow, per user spec.
+     (Was `max-height: 85vh` + `overflow: hidden` with an inner
+     scroller on `.detailBody`.) */
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* "Description" heading — EXACT CSS port of the user-pasted
+   `.detail_body_title` spec:
+     font-family: var(--font-plus-jakarta)
+     color: #fff
+     margin: 0 0 14px
+     font-size: 18px
+     font-weight: 700
+   `flex: none` is added on top of the spec so the heading sits
+   pinned at the top of the flex-column card and doesn't scroll
+   with the body below. Light-theme override flips white → dark
+   navy so the heading stays readable on the light surface. */
+.detailMainHeading {
+  flex: none;
+  font-family: var(--font-plus-jakarta-sans), 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+}
+[data-theme="light"] .detailMainHeading {
+  color: #0f172a;
+}
+.detailBody {
+  font-family: var(--font-body);
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  /* NO inner scroll — the body flows naturally and `.detailMain`
+     grows with it; the page scroll handles any overflow. */
+  /* Left padding 0 so the body text starts at the EXACT same left X
+     as the "Description" heading above it. */
+  padding-left: 0;
+  padding-right: 8px;
+}
+.detailBody::-webkit-scrollbar { width: 6.1px; }
+.detailBody::-webkit-scrollbar-track { background: transparent; }
+.detailBody::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 4px;
+}
+.detailBody::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+[data-theme="light"] .detailBody::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.22);
+}
+[data-theme="light"] .detailBody::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.4);
+}
+/* The backend's HTML embeds inline `style="background-color: #fff;
+   color: #000"` on spans / paragraphs (Word / Google Docs paste
+   artifact). The white background is unreadable on the dark navy
+   page, AND the inline dark color makes the actual text invisible
+   against the dark page after the background is removed.
+   Override BOTH:
+     - background → transparent so highlights are gone
+     - color     → `--ink` (white in dark mode, navy in light) so
+                   the text is always readable against the page
+   The `!important` is required because the inline style otherwise
+   wins the specificity battle. */
+/* Universal override per user spec — strips inline background /
+   border / padding the backend ships on every text element AND
+   caps width at 100% so nothing can break out of the article
+   container. `background: 0 0` is the CSS shorthand for
+   `background: transparent none` (matches the spec the user
+   pasted verbatim). */
+.detailBody :global(*) {
+  background: 0 0 !important;
+  border: none !important;
+  padding: 0 !important;
+  color: var(--ink) !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  /* Defense against the backend HTML shipping inline
+     `margin-left: -10px`, `text-indent: -10px`, or `transform`
+     that pulls content past the body's left edge. The body
+     already has `padding-left: 16px` + `overflow-x: hidden`, but
+     if any descendant has its own negative offset it can still
+     punch past — these resets neutralise those. The `margin: 0
+     auto` shorthand commonly used on backend `<p>` elements has
+     `margin-left: 0` already, so this `!important` override
+     doesn't break legitimate vertical paragraph spacing. */
+  margin-left: 0 !important;
+  text-indent: 0 !important;
+  transform: none !important;
+}
+.detailBody :global(img),
+.detailBody :global(video),
+.detailBody :global(iframe),
+.detailBody :global(table),
+.detailBody :global(pre) {
+  max-width: 100%;
+  height: auto;
+}
+.detailBody :global(pre) {
+  overflow-x: auto;
+}
+/* Paragraph spec per user request — applied to every <p> inside
+   the article body so the description reads with consistent
+   spacing regardless of what the backend ships. Font-size
+   trimmed 16 → 14.5 per user "reduce a little but keep
+   typography exact" spec — same Plus Jakarta / DM Sans typeface
+   from the backend ships through unchanged, just slightly
+   smaller. Line-height stays at 1.75 so the relaxed reading
+   rhythm holds at the smaller size. */
+.detailBody :global(p) {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--ink);
+  margin: 0 0 0.75em;
+}
+.detailBody :global(p:first-of-type) {
+  /* Lede paragraph bumped proportionally with the body (15 →
+     17) so it still reads as the lede. */
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 22px;
+}
+/* Hyperlinks inside the article body — `--blue` with underline.
+   `!important` REQUIRED because the universal `:global(*)` rule
+   above sets `color: var(--ink) !important` to override the
+   backend's inline `color:` styles, which would otherwise turn
+   every <a> the backend ships back into body text. Without this
+   override the user-reported "Apprenticeships.co.uk link text in
+   descriptions … not showed in blue link format" bug repeats. */
+.detailBody :global(a),
+.detailBody :global(a:link),
+.detailBody :global(a:visited),
+.detailBody :global(a *) {
+  color: var(--blue) !important;
+  text-decoration: underline;
+}
+.detailBody :global(a:hover) {
+  filter: brightness(1.15);
+}
+.detailBody :global(strong) {
+  color: var(--ink);
+  font-weight: 700;
+}
+.detailBody :global(blockquote) {
+  margin: 24px 0;
+  padding: 6px 0 6px 20px;
+  border-left: 3px solid var(--blue);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.detailBody :global(h1),
+.detailBody :global(h2),
+.detailBody :global(h3),
+.detailBody :global(h4),
+.detailBody :global(h5),
+.detailBody :global(h6) {
+  font-family: var(--font-head);
+  font-weight: 700;
+  color: var(--ink);
+  margin: 22px 0 10px;
+}
+/* Headings inside the article body — sizes reduced to track the
+   smaller 13.5px body per user "headings should also be smaller —
+   reduce much more" spec. Hierarchy is preserved via font-weight
+   (700) and the top margin, NOT size; visually each heading now
+   reads as a slightly larger / bolder line above its paragraph
+   rather than a much-bigger title. Only the font-size changes —
+   weight, margin, and color stay exactly as before. */
+.detailBody :global(h1) { font-size: 16px; }
+.detailBody :global(h2) { font-size: 14.5px; }
+.detailBody :global(h3) { font-size: 13.5px; }
+.detailBody :global(h4),
+.detailBody :global(h5),
+.detailBody :global(h6) { font-size: 13.5px; }
+.detailBody :global(ul),
+.detailBody :global(ol) {
+  margin: 0 0 14px;
+  padding-left: 22px;
+}
+.detailBody :global(li) {
+  margin-bottom: 6px;
+  /* Match `<p>` — white in dark mode, dark navy in light mode. */
+  color: var(--ink);
+  line-height: 1.7;
+}
+.detailBody :global(code) {
+  background: var(--surface-hover);
+  border-radius: 5px;
+  padding: 2px 6px;
+  font-size: 13.5px;
+}
+
+.detailEmpty {
+  padding: 80px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   Responsive cascade — MUST live at the end of the file so it wins
+   the cascade over the base rules above. CSS at the same specificity
+   is resolved by source order; the desktop base rules earlier in
+   this file would otherwise override the media-query overrides.
+
+   Breakpoints + values mirror /jobs/[id] + /company/[id]:
+     1200 → narrow laptop          padding: 16px 32px 24px, banner 320
+     900  → tablet portrait        banner 280 (padding inherits)
+     640  → mobile (matches jobs)  padding: 16 14 16, banner 180
+     420  → small phone (jobs)     padding: 12 10 14, banner 140
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 1200px) {
+  .detail { padding: 16px 32px 24px; }
+  .bannerCard { margin-bottom: 22px; }
+  /* Banner↔strip gap fix: the banner's bottom margin shrinks on
+     tablet (26 → 22), so the strip's fixed -16 top margin left the
+     gap too small. Re-tune so the net gap stays ~12px (22 - 10). */
+  .thumbStrip { margin-top: -10px; }
+  .detailHead { padding: 20px; margin-bottom: 20px; }
+  .detailHead h1 { font-size: 20px; }
+  .detailMain { padding: 22px 24px; }
+  /* Inner-scroll behaviour disabled for tablets + below
+     (Surface Pro 7, iPad Pro, iPad, smaller). The desktop
+     keeps the `max-height: 85vh` + inner scroll, but on tablets
+     the description container grows with its content and the
+     PAGE scrolls instead — no nested scrollbar inside the card.
+     `overflow: visible` on `.detailMain` and `.detailBody` is
+     enough; `flex: none` on `.detailBody` releases the auto
+     1-fill behaviour so the body sizes to its natural content
+     height. */
+  .detailMain { max-height: none; overflow: visible; }
+  .detailBody {
+    overflow-y: visible;
+    overflow-x: hidden;
+    flex: none;
+    min-height: 0;
+  }
+  /* Tablet chip parity — same `height: 28px` + matching padding +
+     `line-height: 1` so the category chip ("CAREER STARTER KIT")
+     and the date chip ("18 Jun, 2026") render at IDENTICAL pixel
+     heights on iPad Pro / Surface Pro 7 / iPad. Per user "in all
+     tab device the time chip not equally balanced with the first
+     other chip" spec. The fixed `height` neutralises the 1px
+     border on `.metaChip` since `box-sizing: border-box` keeps
+     the total height fixed regardless of border presence. */
+  .catChip,
+  .metaChip {
+    height: 28px;
+    padding: 0 13px;
+    line-height: 1;
+    font-size: 12.5px;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 900px) {
+  /* `.wrap` no longer adds its own side padding — it used to stack on
+     top of `.detail`'s padding (32px + 16px = 48px per side on tablet),
+     which made the edge gap far too wide. `.detail` now owns the side
+     gap alone. */
+  .wrap { padding: 0; }
+  /* Tablet side gap trimmed (was inheriting 32px from the ≤1200 rule
+     and then +16px from `.wrap`). Now a single, tighter 24px so the
+     media + cards sit closer to the screen edges. */
+  .detail { padding: 18px 24px 24px; }
+  .bannerCard { height: 280px; margin-bottom: 18px; }
+  /* Net banner↔strip gap kept ~12px here too (18 - 6). */
+  .thumbStrip { margin-top: -6px; }
+  .slider { height: 280px; }
+  .detailHead { padding: 18px; margin-bottom: 18px; }
+  .dhTop { gap: 14px; padding: 0; }
+  .dhLogo { width: 80px; font-size: 28px; border-radius: 14px; }
+  .detailHead h1 { font-size: 18px; }
+  /* Smaller-tablet chip parity — same `height: 26px` and matching
+     padding so the category chip and date chip render at IDENTICAL
+     pixel heights. Mirrors the ≤1200 equal-height rule but at a
+     slightly tighter scale to fit the smaller card. */
+  .catChip,
+  .metaChip {
+    height: 26px;
+    padding: 0 11px;
+    line-height: 1;
+    font-size: 11.5px;
+    margin-bottom: 0;
+    box-sizing: border-box;
+  }
+  .dhSource { font-size: 13px; }
+  .detailMain { padding: 20px 22px; }
+  /* Tablet body — scaled with the base bump (was 13/14.5; now
+     15/16 so the larger desktop body shrinks proportionally on
+     tablet but stays bigger than the old 13). */
+  .detailBody :global(p) { font-size: 15px; line-height: 1.7; }
+  .detailBody :global(p:first-of-type) { font-size: 16px; }
+  .detailBody :global(blockquote) { font-size: 16px; }
+  .sliderArrow { width: 34px; height: 34px; }
+  .sliderArrow svg { width: 16px; height: 16px; }
+  .backLink { font-size: 18px; margin-bottom: 26px; }
+  .backLink svg { width: 20px; height: 20px; }
+}
+
+/* Mobile (≤640px) — values matched to /jobs/[id]:
+     • `.main` padding 16 14 16    → `.detail`
+     • banner height 180px
+     • hero card padding 18 16     → `.detailHead`
+     • title font 24px             → `.detailHead h1`
+     • company font 19px           → `.dhSource` */
+@media (max-width: 640px) {
+  .detail {
+    padding: 16px 14px 16px;
+    gap: 14px;
+  }
+  .bannerCard {
+    height: 220px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+  }
+  .detailHead {
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .dhTop {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0;
+  }
+  .dhLogo {
+    width: 64px;
+    height: 64px;
+    align-self: flex-start;
+    font-size: 24px;
+    border-radius: 12px;
+  }
+  .dhInfo { width: 100%; }
+  .detailHead h1 { font-size: 24px; line-height: 1.2; }
+  /* "Published by ..." source line — was 19px / 500 which forced
+     a 2-line wrap on narrow viewports per user mobile SS. Trimmed
+     to a sensible 13.5px so it sits on a single line next to the
+     small YP avatar. Same color / weight as desktop. */
+  .dhSource { font-size: 13.5px; font-weight: 500; line-height: 1.35; }
+  .dhSourceAvatar { width: 22px; height: 22px; font-size: 10px; }
+  /* Both chips share an EXACT same outer height on mobile per user
+     "time chip should equal with blue chip" spec. Setting `height:
+     26px` + `line-height: 1` + matching horizontal padding makes
+     them render at identical pixel heights regardless of the
+     border on `.metaChip` (the height is fixed; padding doesn't
+     stack). Font dropped to 11.5px on both so the smaller chip
+     reads in proportion to the narrow card. */
+  .catChip,
+  .metaChip {
+    height: 26px;
+    padding: 0 12px;
+    line-height: 1;
+    font-size: 11.5px;
+    box-sizing: border-box;
+  }
+  .metaChip svg { width: 12px; height: 12px; }
+  .detailMain {
+    padding: 16px 16px 20px;
+    border-radius: 14px;
+  }
+  /* Audio player widget — desktop dims are too big for the 220px
+     mobile banner. Shrink player padding + music box + play button
+     + waveform + timestamps proportionally so the widget fits the
+     narrow card without crowding. */
+  .audioPlayer { padding: 12px 14px; gap: 6px; border-radius: 16px; }
+  .audioTopRow { gap: 12px; }
+  .audioMusicBox { width: 60px; height: 60px; border-radius: 50%; }
+  .audioLabel { font-size: 13px; }
+  .audioLabel svg { width: 18px; height: 18px; }
+  .audioWaveform { height: 26px; }
+  .waveformBar { flex: 0 0 3px; }
+  .audioPlayBtn { width: 38px; height: 38px; }
+  .audioPlayBtn svg { width: 22px; height: 22px; }
+  .audioBottomTime { font-size: 11px; }
+  .audioProgressBar { width: 92%; margin-top: 8px; }
+  /* Keep the time row aligned to the wider mobile bar (92%). */
+  .audioBottomRow { width: 92%; }
+  .audioProgressHandle { width: 10px; height: 10px; }
+  /* Mobile body — bumped to match the base spec (was 13.5/14.5;
+     now 15/15.5 — slightly smaller than desktop but still
+     readable on narrow screens). */
+  .detailBody :global(p) { font-size: 15px; line-height: 24px; }
+  .detailBody :global(p:first-of-type) { font-size: 15.5px; }
+  .detailBody :global(blockquote) {
+    font-size: 15px;
+    padding: 6px 0 6px 14px;
+    margin: 18px 0;
+  }
+  .sliderNav { right: 10px; bottom: 10px; gap: 6px; }
+  /* On VIDEO slides the control bar is RAISED to bottom:44px (≤640
+     video block), so the slider nav `< >` row sits BELOW it at the very
+     bottom — the two rows are SWAPPED vs. the old layout. 10px matches
+     the base `.sliderNav` bottom so video + non-video slides align. */
+  .sliderNavRaised { bottom: 10px; }
+  .sliderArrow { width: 30px; height: 30px; }
+  .sliderArrow svg { width: 14px; height: 14px; }
+  .sliderDot { width: 6px; height: 6px; }
+  .sliderDotActive { width: 16px; }
+  .backLink { font-size: 16px; margin-bottom: 22px; gap: 8px; }
+  .backLink svg { width: 18px; height: 18px; }
+  .dhSourceRow { gap: 8px; }
+}
+
+/* Small mobile (≤420px) — values matched to /jobs/[id]:
+     • `.main` padding 12 10 14
+     • banner 140px
+     • hero card padding 16 14
+     • title 20px, company 17px */
+@media (max-width: 420px) {
+  .detail { padding: 12px 10px 14px; }
+  /* bannerCard inherits 220 from ≤640 — career-talks has no
+     breakpoint below 600 so the banner stays at 220 down to the
+     smallest viewport. */
+  .detailHead { padding: 14px; }
+  .dhTop { padding: 0; }
+  .dhLogo { width: 56px; height: 56px; font-size: 22px; }
+  .detailHead h1 { font-size: 20px; }
+  /* "Published by ..." — was 17px on small phones, which still
+     forced a wrap. Trimmed to match the 13px scale of the rest
+     of the card. */
+  .dhSource { font-size: 13px; }
+  /* Equal-height chips kept on the smallest phones too — same
+     `height: 24px` + `line-height: 1` so the date chip and the
+     category chip render at identical pixel heights. */
+  .catChip,
+  .metaChip {
+    height: 24px;
+    padding: 0 11px;
+    line-height: 1;
+    font-size: 11px;
+  }
+  .detailMain { padding: 14px 12px 18px; }
+  /* Small phone body — bumped to match the base 16 spec while
+     keeping line-height tight for narrow screens. */
+  .detailBody :global(p) { font-size: 14.5px; line-height: 22px; }
+  .backLink { font-size: 15px; }
+}
+
+/* ── PDF / document preview MODAL ──
+   Full-screen dark backdrop + a centred, sharp dialog. Slim header
+   (title + open-in-new-tab + close) over a full-bleed preview iframe.
+   Opens from a pdf/document slide instead of a new browser tab. */
+.docModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Reduced from 32px so the taller modal below has more vertical
+     room to grow into without clipping at the viewport edges. */
+  padding: 16px;
+  background: rgba(3, 6, 14, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: docFadeIn 0.18s ease;
+}
+@keyframes docFadeIn { from { opacity: 0; } to { opacity: 1; } }
+.docModal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 960px;
+  height: 100%;
+  /* Taller per user spec (was 88vh → 92vh → now 96vh). The overlay
+     padding above was trimmed to 16px so this extra height fits the
+     viewport without clipping. */
+  max-height: 96vh;
+  background: var(--surface, #0f172b);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.12));
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+  animation: docPopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-theme="light"] .docModal { background: #ffffff; }
+@keyframes docPopIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.docModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex: none;
+  padding: 12px 14px 12px 18px;
+  border-bottom: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
+}
+.docModalTitle {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-plus-jakarta-sans), sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink, #f8fafc);
+}
+.docModalActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+.docModalIconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--muted, #90a1b9);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.docModalIconBtn:hover {
+  background: var(--surface-hover, rgba(255, 255, 255, 0.08));
+  color: var(--ink, #f8fafc);
+}
+.docModalIconBtn svg { width: 18px; height: 18px; display: block; }
+[data-theme="light"] .docModalIconBtn:hover {
+  background: rgba(15, 23, 42, 0.06);
+  color: #0f172a;
+}
+.docModalBody {
+  flex: 1;
+  min-height: 0;
+  background: #1b2233;
+  /* Allow the body itself to scroll (fallback) + momentum scrolling
+     on touch devices, so the preview is scrollable on tablet/mobile
+     where the iframe's own scroll can be finicky. */
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+[data-theme="light"] .docModalBody { background: #f1f5f9; }
+.docModalFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+/* ── Tablet + mobile (≤1024px) — make the inner scroll work ──
+   On touch / responsive widths the cross-origin preview iframe's OWN
+   scrollbar can't be dragged (touch scroll inside a cross-origin
+   iframe is unreliable here / in device-emulation). Fix: turn the
+   modal BODY into the scroll container. The iframe is given a height
+   TALLER than the body so the body overflows, exposing a native,
+   touch-scrollable scrollbar on the right that moves through the
+   document. Desktop is untouched (iframe stays height:100% with its
+   own working scroll). */
+@media (max-width: 1024px) {
+  .docModalBody {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .docModalFrame {
+    /* Taller than the visible body → body becomes the scroller. */
+    height: 130vh;
+    min-height: 130vh;
+  }
+}
+@media (max-width: 640px) {
+  /* Near-full-screen on phones so the preview "fits" and the body has
+     plenty of definite height to scroll, per user spec. */
+  .docModalOverlay { padding: 8px; }
+  .docModal { max-height: 96vh; border-radius: 12px; }
+  .docModalTitle { font-size: 14px; }
+}
+
+/* ───────────────────────────────────────────────────────────────
+   YP app integration overrides (Claude)
+   The handover detail page was a STANDALONE full-viewport page with
+   its own fixed navbar chrome. In this app the page renders inside
+   the shared (pages) layout (Header + normal document flow), so we:
+     1. Drop the full-page gradient background (the app already paints
+        a global BackgroundOverlay + body bg) — keep the wrapper class
+        only for its CSS-variable tokens + the data-theme switch.
+     2. Re-scope `.detail` from a flex/overflow scroll container to a
+        centred, normal-flow column that matches the app's container
+        width (≈1140px) instead of the 1590px standalone width.
+   ─────────────────────────────────────────────────────────────── */
+.resourcesDetailPage.resourcesDetailPage {
+  background: transparent;
+  background-image: none;
+}
+[data-theme="dark"] .resourcesDetailPage.resourcesDetailPage,
+.resourcesDetailPage.resourcesDetailPage[data-theme="dark"] {
+  background: transparent;
+  background-image: none;
+}
+.resourcesDetailPage .detail {
+  flex: initial;
+  max-width: 1180px;
+  padding: 4px 16px 56px;
+  overflow: visible;
+}
+@media (min-width: 1201px) {
+  .resourcesDetailPage .detail { padding: 4px 24px 56px; }
+}
+
+/* Skeleton shimmer — ported from the handover `_chrome.module.css`
+   so the detail skeleton blocks can read `.skeleton` / `.skelLine`
+   from THIS module (the app version uses class-based dark mode, but
+   the shimmer is theme-agnostic so the same rule works in both). */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08) 50%, transparent);
+  animation: resourceDetailShimmer 1.4s infinite;
+  transform: translateX(-100%);
+}
+[data-theme="light"] .skeleton { background: rgba(15, 23, 42, 0.06); }
+[data-theme="light"] .skeleton::after {
+  background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.06) 50%, transparent);
+}
+.skelLine {
+  position: relative;
+  overflow: hidden;
+  height: 10px;
+  margin: 4px 0;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.skelLine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08) 50%, transparent);
+  animation: resourceDetailShimmer 1.4s infinite;
+  transform: translateX(-100%);
+}
+[data-theme="light"] .skelLine { background: rgba(15, 23, 42, 0.06); }
+[data-theme="light"] .skelLine::after {
+  background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.06) 50%, transparent);
+}
+@keyframes resourceDetailShimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* ── Live inline PDF / document viewer (banner slide) ── */
+.bannerDocFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #ffffff;
+  display: block;
+}
+
+/* ── Fullscreen enlarge button (banner top-right) ── */
+.bannerExpandBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 6;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.2s ease;
+}
+.bannerExpandBtn:hover { background: rgba(0, 0, 0, 0.75); }
+.bannerExpandBtn svg { width: 18px; height: 18px; }

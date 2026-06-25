@@ -1,0 +1,169 @@
+
+.htmlContent p {
+  margin-bottom: 0.75em;
+  line-height: 1.75;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.htmlContent p:last-child {
+  margin-bottom: 0;
+}
+
+.htmlContent div {
+  background: transparent !important;
+  border: none !important;
+}
+
+.htmlContent a {
+  color: #60a5fa;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.htmlContent a:hover {
+  opacity: 0.8;
+}
+
+.htmlContent ul,
+.htmlContent ol {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+  background: transparent !important;
+  /* Quill (the admin editor) emits both bullet and numbered lists as <ol> and
+     distinguishes them via `data-list` on each <li>, rendering markers through
+     CSS counters / ::before — not native list-style. Reset counters here so the
+     same markup renders identically to the admin (AdminLTE). */
+  counter-reset: list-0 list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8;
+}
+
+.htmlContent li {
+  margin-bottom: 0.3em;
+  line-height: 1.75;
+}
+
+/* ---- Quill list markers (data-list driven) ---- */
+/* Any <li> carrying a data-list attribute is Quill-style: suppress the native
+   marker and draw our own via the inline `.ql-ui` placeholder span. */
+.htmlContent li[data-list] {
+  list-style-type: none;
+  position: relative;
+  padding-left: 1.5em;
+}
+
+.htmlContent li[data-list] > :global(.ql-ui)::before {
+  display: inline-block;
+  white-space: nowrap;
+  width: 1.2em;
+  margin-left: -1.5em;
+  margin-right: 0.3em;
+  text-align: right;
+}
+
+/* Bullet list items → • */
+.htmlContent li[data-list='bullet'] > :global(.ql-ui)::before {
+  content: '\2022';
+}
+
+/* Ordered list items → 1. 2. 3. */
+.htmlContent li[data-list='ordered'] {
+  counter-increment: list-0;
+}
+
+.htmlContent li[data-list='ordered'] > :global(.ql-ui)::before {
+  content: counter(list-0, decimal) '. ';
+}
+
+/* Fallback: if the `.ql-ui` placeholder span was stripped during
+   sanitisation, draw the marker on the <li> itself so bullets/numbers still
+   appear. */
+.htmlContent li[data-list='bullet']:not(:has(> :global(.ql-ui)))::before {
+  content: '\2022';
+  display: inline-block;
+  width: 1.2em;
+  margin-left: -1.5em;
+  margin-right: 0.3em;
+  text-align: right;
+}
+
+.htmlContent li[data-list='ordered']:not(:has(> :global(.ql-ui)))::before {
+  content: counter(list-0, decimal) '. ';
+  display: inline-block;
+  width: 1.2em;
+  margin-left: -1.5em;
+  margin-right: 0.3em;
+  text-align: right;
+}
+
+/* Plain (non-Quill) lists keep native markers. */
+.htmlContent ul li:not([data-list]) {
+  list-style-type: disc;
+}
+
+.htmlContent ol li:not([data-list]) {
+  list-style-type: decimal;
+}
+
+.htmlContent strong,
+.htmlContent b {
+  font-weight: 600;
+}
+
+.htmlContent em {
+  font-style: italic;
+}
+
+.htmlContent h1,
+.htmlContent h2,
+.htmlContent h3,
+.htmlContent h4 {
+  font-weight: 600;
+  margin: 1em 0 0.4em;
+  line-height: 1.3;
+}
+
+.htmlContent span {
+  background: transparent !important;
+}
+
+/* Theme text colors — !important to override any leftover inline styles */
+.htmlContent,
+.htmlContent p,
+.htmlContent li,
+.htmlContent span,
+.htmlContent div,
+.htmlContent strong,
+.htmlContent b,
+.htmlContent em,
+.htmlContent h1,
+.htmlContent h2,
+.htmlContent h3,
+.htmlContent h4 {
+  color: #ffffff !important;
+}
+
+:global(:root:not(.dark)) .htmlContent,
+:global(:root:not(.dark)) .htmlContent p,
+:global(:root:not(.dark)) .htmlContent li,
+:global(:root:not(.dark)) .htmlContent span,
+:global(:root:not(.dark)) .htmlContent div,
+:global(:root:not(.dark)) .htmlContent strong,
+:global(:root:not(.dark)) .htmlContent b,
+:global(:root:not(.dark)) .htmlContent em,
+:global(:root:not(.dark)) .htmlContent h1,
+:global(:root:not(.dark)) .htmlContent h2,
+:global(:root:not(.dark)) .htmlContent h3,
+:global(:root:not(.dark)) .htmlContent h4 {
+  color: #000000 !important;
+}
+
+.htmlContent table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.htmlContent img {
+  max-width: 100%;
+  height: auto;
+}

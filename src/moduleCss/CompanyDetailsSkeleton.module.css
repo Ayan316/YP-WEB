@@ -1,0 +1,819 @@
+/* ============================================================================
+   SHIMMER ANIMATION
+   ============================================================================ */
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* ============================================================================
+   BASE SKELETON STYLES
+   ============================================================================ */
+
+.skeletonBase {
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 8px;
+}
+
+/* ============================================================================
+   BACK BUTTON ICON SKELETON
+   ============================================================================ */
+
+.backButtonIcon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 4px;
+}
+
+/* ============================================================================
+   COVER IMAGE SKELETON
+   ============================================================================ */
+
+.coverImageSkeleton {
+  width: 100%;
+  height: 350px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  display: block;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 1280px) {
+  .coverImageSkeleton {
+    height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .coverImageSkeleton {
+    height: 250px;
+  }
+
+  .backButtonIcon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .coverImageSkeleton {
+    height: 200px;
+  }
+
+  .backButtonIcon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.loadingState {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.skeletonDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+
+
+/* ============================================================================
+   SHIMMER ANIMATION
+   ============================================================================ */
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* ============================================================================
+   BASE SKELETON STYLES
+   ============================================================================ */
+
+.skeletonBase {
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 8px;
+}
+
+/* ============================================================================
+   LOGO SKELETON
+   ============================================================================ */
+
+.logoSkeleton {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  flex-shrink: 0;
+}
+
+/* ============================================================================
+   INFO CONTENT LAYOUT
+   ============================================================================ */
+
+.infoContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.infoBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ============================================================================
+   ICON PLACEHOLDER
+   ============================================================================ */
+
+.iconPlaceholder {
+  display: inline-flex;
+  width: 12px;
+  height: 14px;
+  border-radius: 50%;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ============================================================================
+   FOLLOW BUTTON SKELETON
+   ============================================================================ */
+
+.followButtonSkeleton {
+  width: 120px;
+  height: 36px;
+  border-radius: 80px;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ============================================================================
+   TEXT SKELETON
+   ============================================================================ */
+
+.textSkeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 4px;
+  display: block;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 1280px) {
+  .logoSkeleton {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .logoSkeleton {
+    width: 70px;
+    height: 70px;
+  }
+
+  .infoContent {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logoSkeleton {
+    width: 60px;
+    height: 60px;
+  }
+
+  .iconPlaceholder {
+    width: 10px;
+    height: 12px;
+  }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.loadingState {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.skeletonDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+
+/* ============================================================================
+   SHIMMER ANIMATION
+   ============================================================================ */
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* ============================================================================
+   BASE SKELETON STYLES
+   ============================================================================ */
+
+.skeletonBase {
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 8px;
+}
+
+/* ============================================================================
+   TITLE SKELETON
+   ============================================================================ */
+
+.titleSkeleton {
+  width: 180px;
+  height: 20px;
+  margin-bottom: 15px;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 4px;
+  display: block;
+}
+
+/* ============================================================================
+   DESCRIPTION CONTAINER AND LINES
+   ============================================================================ */
+
+.descriptionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+}
+
+.descriptionLine {
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 4px;
+  display: block;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .titleSkeleton {
+    width: 160px;
+  }
+
+  .descriptionContainer {
+    gap: 10px;
+  }
+
+  .descriptionLine {
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .titleSkeleton {
+    width: 140px;
+    height: 18px;
+  }
+
+  .descriptionLine {
+    height: 16px;
+  }
+
+  .descriptionContainer {
+    gap: 8px;
+  }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.loadingState {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.skeletonDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.textPlaceholder {
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 4px;
+}
+
+
+
+/* ============================================================================
+   SHIMMER ANIMATION
+   ============================================================================ */
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* ============================================================================
+   BASE SKELETON STYLES
+   ============================================================================ */
+
+.skeletonBase {
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 8px;
+}
+
+/* ============================================================================
+   TITLE SKELETON
+   ============================================================================ */
+
+.titleSkeleton {
+  width: 120px;
+  height: 20px;
+  margin-bottom: 15px;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 4px;
+  display: block;
+}
+
+/* ============================================================================
+   KEYWORD ITEM SKELETON
+   ============================================================================ */
+
+.keywordItemSkeleton {
+  display: inline-flex;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.keywordItemSkeleton > div {
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 20px;
+  min-width: 80px;
+}
+
+/* ============================================================================
+   WEBSITE LINK SKELETON
+   ============================================================================ */
+
+.websiteLinkSkeleton {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  display: block;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 1366px) {
+  .keywordItemSkeleton {
+    margin-right: 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .titleSkeleton {
+    width: 100px;
+  }
+
+  .keywordItemSkeleton {
+    margin-bottom: 6px;
+    margin-right: 6px;
+  }
+
+  .websiteLinkSkeleton {
+    height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .titleSkeleton {
+    width: 80px;
+    height: 18px;
+  }
+
+  .websiteLinkSkeleton {
+    height: 32px;
+  }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.loadingState {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.skeletonDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+
+/* ============================================================================
+   SHIMMER ANIMATION
+   ============================================================================ */
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* ============================================================================
+   BASE SKELETON STYLES
+   ============================================================================ */
+
+.skeletonBase {
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 8px;
+}
+
+/* ============================================================================
+   SECTION TITLE SKELETON
+   ============================================================================ */
+
+.sectionTitleSkeleton {
+  width: 200px;
+  height: 24px;
+  margin-bottom: 20px;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 4px;
+  display: block;
+}
+
+/* ============================================================================
+   JOB CARD SKELETON STRUCTURE
+   ============================================================================ */
+
+.jobCardWrapper {
+  flex: 0 0 calc(50%);
+  padding: 8px;
+  min-width: 250px;
+  padding: 10px;
+}
+
+.jobCardSkeleton {
+  border: 1px solid #a0aec080;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(2, 12, 25, 0.33);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ============================================================================
+   JOB CARD IMAGE
+   ============================================================================ */
+
+.jobCardImageContainer {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+}
+
+.jobCardImage {
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  display: block;
+}
+
+/* ============================================================================
+   JOB CARD CONTENT
+   ============================================================================ */
+
+.jobCardContent {
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contentLine {
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 4px;
+  display: block;
+}
+
+.contentLine:nth-child(1) {
+  height: 18px;
+}
+
+.contentLine:nth-child(2) {
+  height: 16px;
+  width: 80%;
+}
+
+.contentLine:nth-child(3) {
+  height: 14px;
+  width: 90%;
+}
+
+/* ============================================================================
+   BUTTONS CONTAINER
+   ============================================================================ */
+
+.buttonsContainer {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.buttonsContainer > div {
+  flex: 1;
+  height: 32px;
+  border-radius: 20px;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 1280px) {
+  .jobCardWrapper {
+    flex: 0 0 calc(50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .jobCardWrapper {
+    flex: 0 0 calc(100%);
+    min-width: 200px;
+  }
+
+  .jobCardImageContainer {
+    height: 120px;
+  }
+
+  .jobCardImage {
+    height: 120px;
+  }
+
+  .jobCardContent {
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .sectionTitleSkeleton {
+    height: 22px;
+    width: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .jobCardWrapper {
+    flex: 0 0 100%;
+    min-width: unset;
+  }
+
+  .jobCardImageContainer {
+    height: 100px;
+  }
+
+  .jobCardImage {
+    height: 100px;
+  }
+
+  .jobCardContent {
+    padding: 8px;
+    gap: 4px;
+  }
+
+  .contentLine:nth-child(1) {
+    height: 16px;
+  }
+
+  .contentLine:nth-child(2) {
+    height: 14px;
+  }
+
+  .contentLine:nth-child(3) {
+    height: 12px;
+  }
+
+  .buttonsContainer > div {
+    height: 28px;
+  }
+
+  .sectionTitleSkeleton {
+    width: 160px;
+    height: 20px;
+  }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.loadingState {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.skeletonDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.gridLayout {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
