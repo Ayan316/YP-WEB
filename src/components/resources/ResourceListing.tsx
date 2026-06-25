@@ -12,7 +12,11 @@ import ResourceCategoryFilter from './ResourceCategoryFilter'
 import ResourceCardSkeleton from '../commonUI/loaders/skeletons/ResourceCardSkeleton'
 import { useTheme } from '@/context/ThemeContext'
 import useDebounce from '@/app/hooks/useDebounce'
-import { getResourceCategories, getResources } from '@/services/resources.services'
+import {
+  getResourceCategories,
+  getResources,
+  type GetResourcesPayload,
+} from '@/services/resources.services'
 import type {
   ResourceCategory,
   ResourceListItem,
@@ -98,14 +102,17 @@ const ResourceListing = () => {
     queryFn: async ({ pageParam = 1 }) => {
       // Public read — resources are browseable anonymously. Never calls the
       // detail endpoint (that increments view_count).
-      return getResources({
-        page: pageParam,
-        limit: PAGE_LIMIT,
-        search: debouncedSearch || undefined,
-        category: category !== 'all' ? category : undefined,
-        // 'recently_added' is the API default — omit sort_by for it.
-        sort_by: sortBy !== 'recently_added' ? sortBy : undefined,
-      })
+      //
+      // Build the payload with ONLY the active params so we never pass
+      // `undefined` across the Server Action boundary (which serialises as
+      // the literal "$undefined" on the wire). Omitted keys = backend
+      // defaults: no search filter, all categories, recently-added sort.
+      const payload: GetResourcesPayload = { page: pageParam, limit: PAGE_LIMIT }
+      if (debouncedSearch) payload.search = debouncedSearch
+      if (category !== 'all') payload.category = category
+      // 'recently_added' is the API default — omit sort_by for it.
+      if (sortBy !== 'recently_added') payload.sort_by = sortBy
+      return getResources(payload)
     },
     getNextPageParam: (lastPage, allPages) => {
       const currentPage = allPages.length
@@ -115,6 +122,12 @@ const ResourceListing = () => {
       return currentPage < totalPages ? currentPage + 1 : undefined
     },
     initialPageParam: 1,
+    // Override the 60s global staleTime: a listing must re-query the
+    // backend on EVERY sort / category / search change. With the global
+    // default, re-selecting a sort used within the last minute returned
+    // cached "fresh" data and fired no request — the "sorting stops
+    // calling the API after the first tap" bug.
+    staleTime: 0,
     refetchOnMount: 'always',
     refetchOnWindowFocus: true,
   })
