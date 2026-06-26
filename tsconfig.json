@@ -32,5 +32,5 @@
     "**/*.mts",
     "types/**/*.d.ts"
   ],
-  "exclude": ["node_modules", "resources-handover"]
+  "exclude": ["node_modules"]
 }

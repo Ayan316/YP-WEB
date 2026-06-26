@@ -37,6 +37,7 @@ yarn-error.log*
 
 # Testing / coverage
 coverage/
+.playwright-mcp/
 
 # Editor / OS
 .vscode/

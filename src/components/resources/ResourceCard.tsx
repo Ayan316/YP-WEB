@@ -198,6 +198,20 @@ const ResourceCard = ({
   const imageUrl =
     mediaType === 'image' && thumbnail_url && !imageFailed ? thumbnail_url : null
 
+  const ytThumbId = (() => {
+    if (!imageUrl) return null
+    try {
+      const u = new URL(imageUrl)
+      const host = u.hostname.toLowerCase()
+      if (host !== 'img.youtube.com' && !host.endsWith('ytimg.com')) return null
+      const parts = u.pathname.split('/').filter(Boolean)
+      const viIndex = parts.indexOf('vi')
+      return viIndex >= 0 && parts[viIndex + 1] ? parts[viIndex + 1] : null
+    } catch {
+      return null
+    }
+  })()
+
   // Placeholder visual (gradient/accent/icon/label) for anything that isn't a
   // live image: audio, video, pdf, document, a failed image, or no thumbnail.
   const visual = getMediaVisual((mediaType ?? 'resource') as MediaVisualKey, isDark)
@@ -217,15 +231,35 @@ const ResourceCard = ({
 
   return (
     <div className={styles.r_card} onClick={handleCardClick}>
-      <div className={styles.r_media}>
+      <div className={`${styles.r_media}${ytThumbId ? ` ${styles.r_media_yt}` : ''}`}>
         {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={title}
-            fill
-            unoptimized
-            onError={() => setImageFailed(true)}
-          />
+          <>
+            {ytThumbId && (
+              <div
+                className={styles.r_media_blur}
+                style={{ backgroundImage: `url(${imageUrl})` }}
+                aria-hidden="true"
+              />
+            )}
+            <Image
+              src={imageUrl}
+              alt={title}
+              fill
+              unoptimized
+              onError={() => setImageFailed(true)}
+            />
+            {ytThumbId && (
+              <span className={styles.r_media_play} aria-hidden="true">
+                <svg viewBox="0 0 68 48">
+                  <path
+                    d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z"
+                    fill="#f00"
+                  />
+                  <path d="M45 24 27 14v20z" fill="#fff" />
+                </svg>
+              </span>
+            )}
+          </>
         ) : (
           // No live image — render the per-type placeholder, mirroring the
           // mobile app: gradient + two glow blobs (white top-left, accent

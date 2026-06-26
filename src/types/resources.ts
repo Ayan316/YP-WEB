@@ -24,6 +24,7 @@ export type ResourceMediaType =
   | "audio"
   | "pdf"
   | "document"
+  | "youtube"
   | "";
 
 export interface ResourceMedia {

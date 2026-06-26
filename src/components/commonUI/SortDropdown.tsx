@@ -85,6 +85,7 @@ const SortDropdown: React.FC<SortDropdownProps> = ({
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
+        suppressHydrationWarning
         onClick={() => setOpen(o => !o)}
         style={{
           display: 'inline-flex',

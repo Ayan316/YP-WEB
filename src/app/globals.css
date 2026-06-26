@@ -2822,6 +2822,27 @@ min-width: 120px;
   width: 100% !important;
 }
 
+/* Anonymous header auth (Login) button. The light and dark variants use
+   different base classes (`light-apply-btn` vs `jobDetails_job_item_btns
+   btn-gradient`) which render at different widths/heights, so the button
+   visibly resized when the theme toggled. This shared class pins identical
+   dimensions across both themes and animates the colour swap so the switch
+   reads smoothly. `:not(.w-full)` keeps the desktop button a fixed width while
+   leaving the full-width mobile variant alone. */
+.header-auth-btn {
+  height: 36px !important;
+  border-radius: 9999px !important;
+  font-size: 15px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.3s ease, color 0.3s ease,
+    box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+.header-auth-btn:not(.w-full) {
+  width: 120px !important;
+}
+
 .location-badge-design
 {
 border: 0.88px solid #374888;

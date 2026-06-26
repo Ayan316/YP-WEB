@@ -4,13 +4,36 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Play, Pause, Music2 } from 'lucide-react'
 
+function youTubeEmbedUrl(url: string): string | null {
+  let u: URL
+  try {
+    u = new URL(url.trim())
+  } catch {
+    return null
+  }
+  const host = u.hostname.toLowerCase()
+  let id: string | null = null
+  if (host === 'youtu.be') {
+    id = u.pathname.split('/').filter(Boolean)[0] ?? null
+  } else if (host.endsWith('youtube.com') || host.endsWith('youtube-nocookie.com')) {
+    id = u.searchParams.get('v')
+    if (!id) {
+      const parts = u.pathname.split('/').filter(Boolean)
+      if (parts.length >= 2 && ['shorts', 'embed', 'v', 'live'].includes(parts[0])) {
+        id = parts[1]
+      }
+    }
+  }
+  return id && /^[A-Za-z0-9_-]{11}$/.test(id)
+    ? `https://www.youtube.com/embed/${id}`
+    : null
+}
+
 interface FullScreenMediaModalProps {
   isOpen: boolean
   onClose: () => void
   media: Array<{ url: string; type?: string }>
   initialIndex?: number
-  /** Resume position (seconds) for the media at `initialIndex` — lets the
-   *  modal continue from where an inline player left off instead of 0:00. */
   startTime?: number
   /** Fired whenever the viewer navigates to a different slide inside the
    *  modal, so the caller can keep its own slider in sync (e.g. land on
@@ -35,7 +58,9 @@ const fmtTime = (sec: number): string => {
 const FSAudioPlayer = ({ url, startAt = 0 }: { url: string; startAt?: number }) => {
   const audioRef = useRef<HTMLAudioElement>(null)
   const waveRef = useRef<HTMLDivElement>(null)
+  const barRef = useRef<HTMLDivElement>(null)
   const draggingRef = useRef(false)
+  const barDraggingRef = useRef(false)
   const seekedRef = useRef(false)
   const [playing, setPlaying] = useState(false)
   const [current, setCurrent] = useState(0)
@@ -83,6 +108,16 @@ const FSAudioPlayer = ({ url, startAt = 0 }: { url: string; startAt?: number }) 
   const seekToClientX = (clientX: number) => {
     const a = audioRef.current
     const el = waveRef.current
+    if (!a || !el || !duration) return
+    const rect = el.getBoundingClientRect()
+    const ratio = Math.min(Math.max(0, (clientX - rect.left) / rect.width), 1)
+    a.currentTime = ratio * duration
+    setCurrent(ratio * duration)
+  }
+
+  const seekBarToClientX = (clientX: number) => {
+    const a = audioRef.current
+    const el = barRef.current
     if (!a || !el || !duration) return
     const rect = el.getBoundingClientRect()
     const ratio = Math.min(Math.max(0, (clientX - rect.left) / rect.width), 1)
@@ -174,8 +209,33 @@ const FSAudioPlayer = ({ url, startAt = 0 }: { url: string; startAt?: number }) 
           })}
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 8, fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>
           <span>{fmtTime(current)}</span>
+          <div
+            ref={barRef}
+            style={{
+              position: 'relative',
+              flex: 1,
+              height: 4,
+              borderRadius: 2,
+              background: 'rgba(255,255,255,0.18)',
+              cursor: 'pointer',
+              touchAction: 'none',
+            }}
+            onPointerDown={(e) => {
+              barDraggingRef.current = true
+              try { e.currentTarget.setPointerCapture(e.pointerId) } catch {}
+              seekBarToClientX(e.clientX)
+            }}
+            onPointerMove={(e) => { if (barDraggingRef.current) seekBarToClientX(e.clientX) }}
+            onPointerUp={(e) => {
+              barDraggingRef.current = false
+              try { e.currentTarget.releasePointerCapture(e.pointerId) } catch {}
+            }}
+          >
+            <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${progress * 100}%`, borderRadius: 2, background: '#ffffff' }} />
+            <div style={{ position: 'absolute', left: `${progress * 100}%`, top: '50%', transform: 'translate(-50%, -50%)', width: 14, height: 14, borderRadius: '50%', background: '#fff', boxShadow: '0 2px 6px rgba(0,0,0,0.35)' }} />
+          </div>
           <span>{duration ? fmtTime(duration) : '--:--'}</span>
         </div>
       </div>
@@ -262,11 +322,46 @@ const FullScreenMediaModal = ({
   const isDocument = mediaType === 'document' || ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'].includes(ext)
   const isAudio = mediaType === 'audio'
   const isVideo = mediaType === 'video'
+  // YouTube links (type 'youtube') embed as an <iframe> — they can't play in a
+  // native <video> tag. `ytEmbed` is null when the link isn't a valid YouTube
+  // URL, in which case a plain "open" link is shown instead.
+  const isYouTube = mediaType === 'youtube'
+  const ytEmbed = isYouTube ? youTubeEmbedUrl(current.url) : null
 
   // For PDFs/documents, use the same proxy the inline viewer uses
   const proxiedUrl = `/api/resource-file?url=${encodeURIComponent(current.url)}`
 
   const renderMedia = () => {
+    if (isYouTube) {
+      return ytEmbed ? (
+        <iframe
+          key={current.url}
+          src={`${ytEmbed}?rel=0`}
+          title="YouTube video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+          style={{
+            width: '100%',
+            height: '100%',
+            border: 'none',
+            borderRadius: 8,
+            background: '#000',
+          }}
+        />
+      ) : (
+        <a
+          key={current.url}
+          href={current.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: '#fff', fontSize: 18, fontWeight: 600 }}
+        >
+          Open video ↗
+        </a>
+      )
+    }
+
     if (isVideo) {
       return (
         <video
@@ -332,7 +427,7 @@ const FullScreenMediaModal = ({
             maxWidth: 760,
             padding: '56px 48px',
             borderRadius: 24,
-            background: 'linear-gradient(145deg, rgba(30,20,60,0.95), rgba(10,15,40,0.95))',
+            background: 'linear-gradient(135deg, #1f3a73 0%, #1a2b54 45%, #0f1c33 100%)',
             border: '1px solid rgba(255,255,255,0.08)',
             boxShadow: '0 0 80px rgba(84,51,255,0.15), 0 0 40px rgba(35,184,255,0.1), inset 0 1px 0 rgba(255,255,255,0.06)',
             backdropFilter: 'blur(20px)',

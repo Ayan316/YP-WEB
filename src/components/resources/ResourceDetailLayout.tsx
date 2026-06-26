@@ -1,14 +1,7 @@
 'use client'
 
 /**
- * Resource detail — new handover UI, wired to this app's data layer.
- *
- * UI (banner slider → thumbnail strip → title/chips card → article body)
- * is a 1:1 adoption of the resources-handover detail page: custom
- * waveform AudioPlayer, custom VideoPlayer (skip / speed / mute /
- * fullscreen), a LIVE inline PDF/doc viewer, a fullscreen enlarge modal
- * (reusing the app's FullScreenMediaModal), and an auto-linkified HTML body
- * with a "Description" heading.
+
  *
  * Functionality is UNCHANGED from this app: data comes from the existing
  * React-Query `getResourceDetail` server action, the HTML body is still
@@ -27,6 +20,7 @@ import DOMPurify from 'dompurify'
 import { useTheme } from '@/context/ThemeContext'
 import { getResourceDetail } from '@/services/resources.services'
 import FullScreenMediaModal from '@/components/commonUI/FullScreenMediaModal'
+import ResourceVideoEmbed from '@/components/resources/ResourceVideoEmbed'
 import styles from '@/moduleCss/resourceDetail.module.css'
 import type {
   ResourceDetail,
@@ -46,10 +40,9 @@ const WAVEFORM_HEIGHTS = [
   72, 90, 55, 65, 85, 48, 95, 70, 60, 75,
 ]
 
-type SlideKind = 'image' | 'audio' | 'video' | 'pdf' | 'document'
+type SlideKind = 'image' | 'audio' | 'video' | 'pdf' | 'document' | 'youtube'
 
-/* Resolve a media URL the same way the legacy banner did (relative paths
-   get prefixed with the storage origin; absolute URLs pass through). */
+
 function resolveUrl(url: string | null | undefined): string | null {
   if (!url) return null
   const raw = url.startsWith('http')
@@ -80,7 +73,7 @@ function deriveMediaType(url: string | null | undefined): SlideKind {
 
 function coerceKind(raw: ResourceMediaType, url: string): SlideKind {
   const norm = (raw || '').toLowerCase().trim()
-  if (norm === 'image' || norm === 'audio' || norm === 'video' || norm === 'pdf' || norm === 'document') {
+  if (norm === 'image' || norm === 'audio' || norm === 'video' || norm === 'pdf' || norm === 'document' || norm === 'youtube') {
     return norm
   }
   return deriveMediaType(url)
@@ -596,8 +589,8 @@ function VideoPlayer({ src, title, active = true }: { src: string; title?: strin
 }
 
 /* Per-media-type glyph for the thumbnail strip. */
-function ThumbIcon({ kind }: { kind: 'audio' | 'video' | 'pdf' | 'document' }) {
-  if (kind === 'video') {
+function ThumbIcon({ kind }: { kind: 'audio' | 'video' | 'pdf' | 'document' | 'youtube' }) {
+  if (kind === 'video' || kind === 'youtube') {
     return (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="m23 7-7 5 7 5V7z" />
@@ -698,6 +691,7 @@ type Slide =
   | { kind: 'image'; key: string; url: string; name: string }
   | { kind: 'placeholder'; key: string }
   | { kind: 'audio' | 'video' | 'pdf' | 'document'; key: string; url: string; name: string }
+  | { kind: 'youtube'; key: string; url: string; name: string }
 
 export default function ResourceDetailLayout({ id }: Props) {
   const router = useRouter()
@@ -864,6 +858,13 @@ export default function ResourceDetailLayout({ id }: Props) {
                           </div>
                         )
                       }
+                      if (s.kind === 'youtube') {
+                        return (
+                          <div key={s.key} className={styles.sliderSlide}>
+                            <ResourceVideoEmbed url={s.url} title={s.name} active={i === slideIndex} />
+                          </div>
+                        )
+                      }
                       // pdf / document — rendered LIVE inline in the banner
                       // (proxied PDF / Office web viewer). The expand button
                       // at the banner's top-right opens the fullscreen modal.
@@ -884,11 +885,15 @@ export default function ResourceDetailLayout({ id }: Props) {
                       expand-to-modal view the user asked for. */}
                   {fullscreenMedia.length > 0 &&
                   allSlides[slideIndex] &&
-                  allSlides[slideIndex].kind !== 'placeholder' ? (
+                  allSlides[slideIndex].kind !== 'placeholder' &&
+                  allSlides[slideIndex].kind !== 'youtube' ? (
+                    // YouTube slides use the YouTube player's own native
+                    // fullscreen button, so the app's expand-to-modal button is
+                    // hidden for them (avoids two players playing at once).
                     <ExpandButton onClick={openFullscreen} />
                   ) : null}
                   {allSlides.length > 1 ? (
-                    <div className={`${styles.sliderNav}${allSlides[slideIndex]?.kind === 'video' ? ` ${styles.sliderNavRaised}` : ''}`}>
+                    <div className={`${styles.sliderNav}${allSlides[slideIndex]?.kind === 'video' || allSlides[slideIndex]?.kind === 'youtube' ? ` ${styles.sliderNavRaised}` : ''}`}>
                       <div className={styles.sliderDots}>
                         {allSlides.map((_, i) => (
                           <button

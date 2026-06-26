@@ -123,6 +123,15 @@ export default function Header() {
   const { preference, resolvedTheme, setPreference } = useAppTheme();
   const isLight = resolvedTheme === "light";
 
+  // Anonymous-only Day/Night toggle. Logged-in users manage the theme from the
+  // Settings → Appearance menu (which persists to the backend). For anonymous
+  // visitors this is a frontend-only switch — `setPreference` flips the `dark`
+  // class on <html> and stores the choice in the theme_settings cookie. No API
+  // call is involved; on login the backend's theme_setting overwrites it.
+  const toggleAnonTheme = () => {
+    setPreference(resolvedTheme === "dark" ? "light" : "dark");
+  };
+
   const getNormalizedPath = (path: string | null) => {
     if (!path) return "/home";
     if (path.startsWith("/jobs")) return "/jobs";
@@ -846,6 +855,40 @@ export default function Header() {
             Hidden while the auth signal is still resolving (neither branch). */}
         {!isAuthenticated && !isResolving && (
           <Box sx={{ px: 2, pt: 1 }}>
+            {/* Day/Night toggle — frontend only, no API (anonymous visitors) */}
+            <ListItem disablePadding sx={{ mb: 1 }}>
+              <ListItemButton
+                onClick={toggleAnonTheme}
+                sx={{
+                  borderRadius: "8px",
+                  py: 1.5,
+                  px: 2,
+                  "&:hover": {
+                    background: isLight
+                      ? "rgba(0, 0, 0, 0.05)"
+                      : "rgba(255, 255, 255, 0.05)",
+                  },
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 40 }}>
+                  {isLight ? (
+                    <Moon size={20} color="#040F1F" />
+                  ) : (
+                    <Sun size={20} color="#FFD54A" />
+                  )}
+                </ListItemIcon>
+                <ListItemText
+                  primary={isLight ? "Dark mode" : "Light mode"}
+                  sx={{
+                    "& .MuiListItemText-primary": {
+                      fontWeight: 400,
+                      fontSize: "16px",
+                      color: isLight ? "#040F1F" : "#a0aec0",
+                    },
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
             <button
               type="button"
               onClick={() => {
@@ -854,8 +897,8 @@ export default function Header() {
               }}
               className={
                 isLight
-                  ? 'light-apply-btn w-full'
-                  : `${styles.jobDetails_job_item_btns} btn-gradient w-full`
+                  ? 'light-apply-btn w-full header-auth-btn'
+                  : `light-apply-btn w-full header-auth-btn`
               }
             >
               Login
@@ -1030,14 +1073,78 @@ export default function Header() {
                       // flashing the wrong (logged-in vs anonymous) UI.
                       <div style={{ width: 58, height: 58 }} aria-hidden="true" />
                     ) : (
-                      <div style={{ display: "flex", alignItems: "center" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <Tooltip title={isLight ? "Switch to dark mode" : "Switch to light mode"}>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={!isLight}
+                            data-testid="theme-toggle"
+                            onClick={toggleAnonTheme}
+                            aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
+                            style={{
+                              position: "relative",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              width: 60,
+                              height: 30,
+                              borderRadius: 9999,
+                              cursor: "pointer",
+                              padding: 3,
+                              background: isLight ? "#dbe4f0" : "#2a3550",
+                              border: isLight
+                                ? "1px solid rgba(0, 0, 0, 0.1)"
+                                : "1px solid rgba(255, 255, 255, 0.12)",
+                              transition: "background 0.3s ease, border-color 0.3s ease",
+                            }}
+                          >
+                            {/* Track icons */}
+                            <Sun
+                              size={14}
+                              color="#FFD54A"
+                              style={{
+                                position: "absolute",
+                                left: 7,
+                                opacity: isLight ? 0 : 1,
+                                transition: "opacity 0.3s ease",
+                              }}
+                            />
+                            <Moon
+                              size={14}
+                              color="#356FEE"
+                              style={{
+                                position: "absolute",
+                                right: 7,
+                                opacity: isLight ? 1 : 0,
+                                transition: "opacity 0.3s ease",
+                              }}
+                            />
+                            {/* Sliding knob */}
+                            <span
+                              style={{
+                                position: "absolute",
+                                top: 2,
+                                left: 3,
+                                width: 24,
+                                height: 24,
+                                borderRadius: "50%",
+                                background: "#ffffff",
+                                boxShadow: "0 1px 3px rgba(0, 0, 0, 0.3)",
+                                transform: isLight
+                                  ? "translateX(0)"
+                                  : "translateX(30px)",
+                                transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                              }}
+                            />
+                          </button>
+                        </Tooltip>
                         <button
                           type="button"
                           onClick={() => router.push(authUrlWithTab("login"))}
                           className={
                             isLight
-                              ? 'light-apply-btn'
-                              : `${styles.jobDetails_job_item_btns} btn-gradient`
+                              ? 'light-apply-btn header-auth-btn'
+                              : `light-apply-btn header-auth-btn`
                           }
                         >
                           Login
