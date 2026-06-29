@@ -358,7 +358,7 @@ const FullScreenMediaModal = ({
           key={current.url}
           style={{ position: 'relative', width: '100%', height: '100%', borderRadius: 8, overflow: 'hidden' }}
         >
-          <ResourceVideoEmbed url={current.url} title="YouTube video" active={pageActive} />
+          <ResourceVideoEmbed url={current.url} title="YouTube video" active={pageActive} related />
         </div>
       ) : (
         <a

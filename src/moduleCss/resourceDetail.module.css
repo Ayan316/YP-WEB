@@ -1365,11 +1365,24 @@
    JSX) when there are 2+ media items. The `.bannerCard` above ships
    a 26px bottom margin, so a small negative top margin tightens the
    banner↔strip gap toward the live YP look. */
+/* Row that holds the thumbnail strip (left) and the expand button (right),
+   pushed apart with space-between. Carries the outer margin that used to live
+   on `.thumbStrip`. */
+.thumbStripRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -14.5px 0 22px;
+}
 .thumbStrip {
   display: flex;
   flex-wrap: nowrap;
   gap: 13px;
-  margin: -14.5px 0 22px;
+  /* Take the available row width and scroll internally, leaving room for the
+     expand button on the right. Outer margin now lives on `.thumbStripRow`. */
+  flex: 1 1 auto;
+  min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
@@ -2293,13 +2306,18 @@
   border: none;
   display: block;
 }
+/* Swipe surface over the CENTRE of the YouTube player only. The top band
+   (title + settings/CC/fullscreen icons) and the bottom band (progress
+   scrubber + control row) are intentionally left uncovered so YouTube's
+   native controls stay clickable. Swiping the middle changes resource slides. */
 .ytSwipeLayer {
   position: absolute;
-  top: 56px;
-  bottom: 56px;
+  top: 14%;
+  bottom: 32%;
   left: 0;
   right: 0;
   z-index: 3;
+  touch-action: pan-y;
 }
 .ytThumbBlur {
   position: absolute;
@@ -2390,10 +2408,7 @@
 
 /* ── Fullscreen enlarge button (banner top-right) ── */
 .bannerExpandBtn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 6;
+  flex: 0 0 auto;
   width: 38px;
   height: 38px;
   border-radius: 50%;

@@ -8,6 +8,18 @@ interface ResourceVideoEmbedProps {
   url: string
   title?: string
   active?: boolean
+  // When true, renders a transparent swipe surface over the *centre* of the
+  // player so the parent slider can be swiped to change slides. The top and
+  // bottom bands are left uncovered so YouTube's own controls (title/settings
+  // up top, scrubber + control bar at the bottom) stay fully clickable. Used
+  // by the resource slider; the fullscreen modal leaves it off (no swipe).
+  swipeable?: boolean
+  // Controls YouTube's `rel` flag. false (default) → `rel=0`, which keeps the
+  // end-screen / "more videos" suggestions to the same channel only (the
+  // closest YouTube allows to "no suggestions") — used by the inline player.
+  // true → `rel=1`, the full related-video suggestions — used by the expander
+  // (fullscreen modal).
+  related?: boolean
 }
 
 function youTubeId(url: string): string | null {
@@ -58,7 +70,7 @@ function loadYouTubeIframeApi(): Promise<any> {
   })
 }
 
-const ResourceVideoEmbed = ({ url, title, active = true }: ResourceVideoEmbedProps) => {
+const ResourceVideoEmbed = ({ url, title, active = true, swipeable = false, related = false }: ResourceVideoEmbedProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const playerRef = useRef<any>(null)
   const tapStart = useRef<{ x: number; y: number } | null>(null)
@@ -66,6 +78,9 @@ const ResourceVideoEmbed = ({ url, title, active = true }: ResourceVideoEmbedPro
   const [thumbHiResFailed, setThumbHiResFailed] = useState(false)
   const id = youTubeId(url)
 
+  // Pause the video when this embed becomes inactive (user swiped to another
+  // slide / left the page). Uses the YouTube IFrame postMessage API — the
+  // `enablejsapi=1` flag on the src lets the player accept this command.
   useEffect(() => {
     if (!active && iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage(
@@ -75,8 +90,12 @@ const ResourceVideoEmbed = ({ url, title, active = true }: ResourceVideoEmbedPro
     }
   }, [active])
 
+  // In the slider context the centre swipe surface covers YouTube's own
+  // play/pause button, so we drive play/pause ourselves via the IFrame API and
+  // a tap on that surface (a horizontal drag is handled by the parent slider).
+  // Only needed when `swipeable`; the fullscreen modal uses native controls.
   useEffect(() => {
-    if (!playing || !id) return
+    if (!swipeable || !playing || !id) return
     let cancelled = false
     let player: any = null
     loadYouTubeIframeApi().then((YT: any) => {
@@ -91,7 +110,7 @@ const ResourceVideoEmbed = ({ url, title, active = true }: ResourceVideoEmbedPro
       } catch {}
       playerRef.current = null
     }
-  }, [playing, id])
+  }, [swipeable, playing, id])
 
   const togglePlay = () => {
     const p = playerRef.current
@@ -108,6 +127,8 @@ const ResourceVideoEmbed = ({ url, title, active = true }: ResourceVideoEmbedPro
     const start = tapStart.current
     tapStart.current = null
     if (!start) return
+    // A small movement = tap → toggle play/pause. A larger horizontal move is a
+    // swipe and is left for the parent slider (this handler does nothing then).
     if (Math.abs(e.clientX - start.x) < 8 && Math.abs(e.clientY - start.y) < 8) {
       togglePlay()
     }
@@ -166,18 +187,26 @@ const ResourceVideoEmbed = ({ url, title, active = true }: ResourceVideoEmbedPro
       <iframe
         ref={iframeRef}
         className={styles.ytEmbedFrame}
-        src={`https://www.youtube.com/embed/${id}?rel=0&autoplay=1&enablejsapi=1`}
+        src={`https://www.youtube.com/embed/${id}?rel=${related ? 1 : 0}&autoplay=1&enablejsapi=1`}
         title={title || 'YouTube video'}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
         referrerPolicy="strict-origin-when-cross-origin"
       />
-      <div
-        className={styles.ytSwipeLayer}
-        onPointerDown={onLayerDown}
-        onPointerUp={onLayerUp}
-        aria-hidden="true"
-      />
+      {/* Centre-only surface. A tap toggles play/pause (the layer covers
+          YouTube's own centre button); a horizontal drag bubbles to the parent
+          slider to change slides. It's a plain <div> (not an iframe), so the
+          slider's pointerdown handler picks up the gesture instead of bailing.
+          The top/bottom bands stay uncovered so the native scrubber + control
+          row remain clickable. */}
+      {swipeable && (
+        <div
+          className={styles.ytSwipeLayer}
+          onPointerDown={onLayerDown}
+          onPointerUp={onLayerUp}
+          aria-hidden="true"
+        />
+      )}
     </div>
   )
 }

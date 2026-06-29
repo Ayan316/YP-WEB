@@ -647,11 +647,8 @@ function ExpandButton({ onClick }: { onClick: () => void }) {
       aria-label="View fullscreen"
       onClick={onClick}
     >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <polyline points="15 3 21 3 21 9" />
-        <polyline points="9 21 3 21 3 15" />
-        <line x1="21" y1="3" x2="14" y2="10" />
-        <line x1="3" y1="21" x2="10" y2="14" />
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} aria-hidden="true">
+        <path d="M8 4H4m0 0v4m0-4l5 5m7-5h4m0 0v4m0-4l-5 5M8 20H4m0 0v-4m0 4l5-5m7 5h4m0 0v-4m0 4l-5-5" />
       </svg>
     </button>
   )
@@ -933,7 +930,7 @@ export default function ResourceDetailLayout({ id }: Props) {
     if (s.kind === 'youtube') {
       return (
         <div key={key} className={styles.sliderSlide}>
-          <ResourceVideoEmbed url={s.url} title={s.name} active={isActive && !fullscreenOpen && pageActive} />
+          <ResourceVideoEmbed url={s.url} title={s.name} active={isActive && !fullscreenOpen && pageActive} swipeable />
         </div>
       )
     }
@@ -1007,15 +1004,6 @@ export default function ResourceDetailLayout({ id }: Props) {
                     {loopClone === 'forward' &&
                       renderSlide(allSlides[0], 'loop-clone-fwd', false, 0)}
                   </div>
-                  {/* Fullscreen enlarge — shown for every real slide
-                      (images, video, audio, pdf, doc). Video keeps its own
-                      native fullscreen control too; this is the extra
-                      expand-to-modal view the user asked for. */}
-                  {fullscreenMedia.length > 0 &&
-                  allSlides[slideIndex] &&
-                  allSlides[slideIndex].kind !== 'placeholder' ? (
-                    <ExpandButton onClick={openFullscreen} />
-                  ) : null}
                   {allSlides.length > 1 ? (
                     <div className={`${styles.sliderNav}${allSlides[slideIndex]?.kind === 'video' || allSlides[slideIndex]?.kind === 'youtube' ? ` ${styles.sliderNavRaised}` : ''}`}>
                       <div className={styles.sliderDots}>
@@ -1043,44 +1031,61 @@ export default function ResourceDetailLayout({ id }: Props) {
                   ) : null}
                 </div>
 
-                {allSlides.length > 1 ? (
-                  <div
-                    className={styles.thumbStrip}
-                    role="tablist"
-                    aria-label="Resource media"
-                    ref={railRef}
-                    onPointerDown={handleRailDown}
-                    onPointerMove={handleRailMove}
-                    onPointerUp={handleRailUp}
-                    onPointerLeave={handleRailUp}
-                  >
-                    {allSlides.map((s, i) => {
-                      if (s.kind === 'placeholder') return null
-                      const isActive = i === slideIndex
-                      return (
-                        <button
-                          key={s.key}
-                          type="button"
-                          role="tab"
-                          aria-selected={isActive}
-                          aria-label={`Show ${s.kind} ${i + 1} of ${allSlides.length}`}
-                          className={`${styles.thumbBtn} ${isActive ? styles.thumbBtnActive : ''}`}
-                          onClick={() => {
-                            if (railDrag.current.moved) return
-                            go(i)
-                          }}
-                        >
-                          {s.kind === 'image' ? (
-                            /* eslint-disable-next-line @next/next/no-img-element */
-                            <img className={styles.thumbImg} src={s.url} alt="" loading="lazy" draggable={false} />
-                          ) : (
-                            <span className={styles.thumbIcon} aria-hidden="true">
-                              <ThumbIcon kind={s.kind} />
-                            </span>
-                          )}
-                        </button>
-                      )
-                    })}
+                {(allSlides.length > 1 ||
+                  (fullscreenMedia.length > 0 &&
+                    allSlides[slideIndex] &&
+                    allSlides[slideIndex].kind !== 'placeholder')) ? (
+                  <div className={styles.thumbStripRow}>
+                    {allSlides.length > 1 ? (
+                      <div
+                        className={styles.thumbStrip}
+                        role="tablist"
+                        aria-label="Resource media"
+                        ref={railRef}
+                        onPointerDown={handleRailDown}
+                        onPointerMove={handleRailMove}
+                        onPointerUp={handleRailUp}
+                        onPointerLeave={handleRailUp}
+                      >
+                        {allSlides.map((s, i) => {
+                          if (s.kind === 'placeholder') return null
+                          const isActive = i === slideIndex
+                          return (
+                            <button
+                              key={s.key}
+                              type="button"
+                              role="tab"
+                              aria-selected={isActive}
+                              aria-label={`Show ${s.kind} ${i + 1} of ${allSlides.length}`}
+                              className={`${styles.thumbBtn} ${isActive ? styles.thumbBtnActive : ''}`}
+                              onClick={() => {
+                                if (railDrag.current.moved) return
+                                go(i)
+                              }}
+                            >
+                              {s.kind === 'image' ? (
+                                /* eslint-disable-next-line @next/next/no-img-element */
+                                <img className={styles.thumbImg} src={s.url} alt="" loading="lazy" draggable={false} />
+                              ) : (
+                                <span className={styles.thumbIcon} aria-hidden="true">
+                                  <ThumbIcon kind={s.kind} />
+                                </span>
+                              )}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    ) : (
+                      <span />
+                    )}
+                    {/* Fullscreen enlarge — moved out of the banner into this
+                        row, sitting at the far right via the row's
+                        space-between. Shown for every real slide. */}
+                    {fullscreenMedia.length > 0 &&
+                    allSlides[slideIndex] &&
+                    allSlides[slideIndex].kind !== 'placeholder' ? (
+                      <ExpandButton onClick={openFullscreen} />
+                    ) : null}
                   </div>
                 ) : null}
 

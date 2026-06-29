@@ -6,7 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import Image from "next/image";
 import Link from "next/link";
-import DefaultProfile from "../../../public/profile/default_user_icon.png";
+import DefaultUser from "../../../public/profile/Default_user.svg";
 import styles from "../../_assets/style/style.module.css";
 import LogOutModal from "./LogOutModal";
 import { useEffect, useState } from "react";
@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import ConfirmModal from "./ConfirmModal";
 import { deleteAccount } from "@/services/auth.services";
 import { useAuthGate } from "@/app/hooks/useAuthGate";
+import { authUrlWithCallback } from "@/lib/callbackUrl";
 
 
 interface ProfileDropdownProps {
@@ -35,6 +36,10 @@ interface ProfileDropdownProps {
   onLogout?: () => void;
   setPathname?: (pathname: string) => void;
   userProfile?: any;
+  // When false the dropdown renders its anonymous-visitor variant: default
+  // profile photo as the trigger and a reduced menu (Appearance, Contact Us,
+  // Login). Defaults to true so existing call-sites keep the logged-in UI.
+  isAuthenticated?: boolean;
 }
 
 export default function ProfileDropdown({
@@ -45,6 +50,7 @@ export default function ProfileDropdown({
   onLogout,
   setPathname,
   userProfile,
+  isAuthenticated = true,
 }: ProfileDropdownProps) {
   const { preference, resolvedTheme, setPreference } = useTheme();
   const updateProfileMutation = useUpdateProfile();
@@ -91,6 +97,34 @@ export default function ProfileDropdown({
     // if (setPathname) {
     //   setPathname(`/profile/${userId}`)
     // }
+  };
+
+  const handleLoginClick = () => {
+    handleClose();
+    const url = authUrlWithCallback("/auth");
+    const separator = url.includes("?") ? "&" : "?";
+    router.push(`${url}${separator}tab=login`);
+  };
+
+  // Apply a theme preference. Logged-in users persist it to the backend (the
+  // update-profile call is full-replace, so we re-send the cached profile with
+  // only `theme_setting` overridden). Anonymous visitors get a frontend-only
+  // switch — `setPreference` flips the theme and stores it in the cookie; no
+  // API call and no auth gate.
+  const handleSelectTheme = (opt: ThemePreference) => {
+    if (!isAuthenticated) {
+      setPreference(opt);
+      return;
+    }
+    ensureAuthed("update your profile", () => {
+      setPreference(opt);
+      updateProfileMutation.mutate(
+        buildProfilePreservePayload(userProfile?.data, {
+          theme_setting: themePreferenceToApi(opt),
+        }),
+      );
+      toast.success("Theme updated successfully");
+    });
   };
 
   // const handleLogoutClick = () => {
@@ -231,13 +265,23 @@ export default function ProfileDropdown({
           className={styles.profile_image}
         /> */}
 
-        <Avatar
-          imageUrl={profileImage || null}
-          firstName={userProfile?.data?.first_name}
-          lastName={userProfile?.data?.last_name}
-          size={58}
-          className={`w-full h-full object-cover ${styles.profile_image} cursor-pointer`}
-        />
+        {isAuthenticated ? (
+          <Avatar
+            imageUrl={profileImage || null}
+            firstName={userProfile?.data?.first_name}
+            lastName={userProfile?.data?.last_name}
+            size={58}
+            className={`w-full h-full object-cover ${styles.profile_image} cursor-pointer`}
+          />
+        ) : (
+          <Image
+            src={DefaultUser}
+            alt="profile"
+            width={58}
+            height={58}
+            className={`${styles.profile_image} cursor-pointer`}
+          />
+        )}
       </Link>
 
       <Menu
@@ -281,36 +325,39 @@ export default function ProfileDropdown({
           },
         }}
       >
-        <div className={styles.profiledropdown_info_area}>
-          <div className={styles.profiledropdown_icon_area}>
-            {/* <Image
-              src={profileImage || DefaultProfile}
-              alt="profile"
-              width={58}
-              height={58}
-              className={styles.profile_image}
-            /> */}
+        {isAuthenticated && [
+          <div key="info" className={styles.profiledropdown_info_area}>
+            <div className={styles.profiledropdown_icon_area}>
+              {/* <Image
+                src={profileImage || DefaultProfile}
+                alt="profile"
+                width={58}
+                height={58}
+                className={styles.profile_image}
+              /> */}
 
-            <Avatar
-              imageUrl={profileImage || null}
-              firstName={userProfile?.data?.first_name}
-              lastName={userProfile?.data?.last_name}
-              size={50}
-              className={`w-full h-full object-cover ${styles.profile_image} cursor-pointer`}
-            />
-          </div>
-          <div className={styles.profiledropdown_name_area}>
-            <h3>{userProfile?.data?.full_name}</h3>
-            {/* <p>{userProfile?.data?.college}</p>
-            <div className={styles.profiledropdown_skills_area}>
-              <p>{userProfile?.data?.skills?.join(' | ')}</p>
-            </div> */}
-          </div>
-        </div>
-        <Divider
-          sx={{ my: 0.5 }}
-          style={{ background: "#A3A3A3", margin: "10px 0px" }}
-        />
+              <Avatar
+                imageUrl={profileImage || null}
+                firstName={userProfile?.data?.first_name}
+                lastName={userProfile?.data?.last_name}
+                size={50}
+                className={`w-full h-full object-cover ${styles.profile_image} cursor-pointer`}
+              />
+            </div>
+            <div className={styles.profiledropdown_name_area}>
+              <h3>{userProfile?.data?.full_name}</h3>
+              {/* <p>{userProfile?.data?.college}</p>
+              <div className={styles.profiledropdown_skills_area}>
+                <p>{userProfile?.data?.skills?.join(' | ')}</p>
+              </div> */}
+            </div>
+          </div>,
+          <Divider
+            key="info-divider"
+            sx={{ my: 0.5 }}
+            style={{ background: "#A3A3A3", margin: "10px 0px" }}
+          />,
+        ]}
 
         {/* Appearance Section */}
         <div style={{ padding: "4px 0px 0" }}>
@@ -340,21 +387,7 @@ export default function ProfileDropdown({
           <MenuItem
             key={opt}
             className={`menuItem appearance_item ${isActive ? "active" : ""}`}
-            onClick={() => {
-              ensureAuthed("update your profile", () => {
-                setPreference(opt);
-                // Backend update-profile is full-replace; sending only
-                // `theme_setting` would wipe phone/name/location/etc. Send the
-                // cached profile snapshot with theme_setting overridden so the
-                // rest of the user's data stays intact server-side.
-                updateProfileMutation.mutate(
-                  buildProfilePreservePayload(userProfile?.data, {
-                    theme_setting: themePreferenceToApi(opt),
-                  }),
-                );
-                toast.success("Theme updated successfully");
-              });
-            }}
+            onClick={() => handleSelectTheme(opt)}
             sx={{
               display: "flex",
               justifyContent: "flex-start",
@@ -447,52 +480,70 @@ export default function ProfileDropdown({
           </span>
         </MenuItem> */}
 
-        <Divider
-          sx={{ my: 0.5 }}
-          style={{ background: "#A3A3A3", margin: "10px 0px" }}
-        />
+        {isAuthenticated
+          ? [
+              <Divider
+                key="del-divider-top"
+                sx={{ my: 0.5 }}
+                style={{ background: "#A3A3A3", margin: "10px 0px" }}
+              />,
+              <MenuItem
+                key="delete-account"
+                onClick={handleDeleteAccountClick}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  color: "#EF4444 !important",
+                  fontWeight: 500,
+                  fontSize: "14px",
+                }}
+              >
+                <Trash2 size={16} color="#EF4444" />
+                <span style={{ color: "#EF4444" }}>Delete Account</span>
+              </MenuItem>,
+              <Divider
+                key="del-divider-bottom"
+                sx={{ my: 0.5 }}
+                style={{ background: "#A3A3A3", margin: "10px 0px" }}
+              />,
+              <div key="account-actions" className={styles.profiledropdown_info_area}>
+                {/* <Link href={`/profile/${userId}`}> */}
+                <MenuItem
+                  className={resolvedTheme === "light" ? "light-save-btn" : "menuItem view_profile_btn"}
+                  onClick={handleProfileClick}
+                  // href={`/profile/${userId}`}
+                >
+                  View Profile
+                </MenuItem>
 
-        <MenuItem
-          onClick={handleDeleteAccountClick}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            color: "#EF4444 !important",
-            fontWeight: 500,
-            fontSize: "14px",
-          }}
-        >
-          <Trash2 size={16} color="#EF4444" />
-          <span style={{ color: "#EF4444" }}>Delete Account</span>
-        </MenuItem>
-
-        <Divider
-          sx={{ my: 0.5 }}
-          style={{ background: "#A3A3A3", margin: "10px 0px" }}
-        />
-
-        <div className={styles.profiledropdown_info_area}>
-          {/* <Link href={`/profile/${userId}`}> */}
-          <MenuItem
-            className={resolvedTheme === "light" ? "light-save-btn" : "menuItem view_profile_btn"}
-            onClick={handleProfileClick}
-            // href={`/profile/${userId}`}
-          >
-            View Profile
-          </MenuItem>
-         
-          {/* <Divider sx={{ my: 0.5 }} style={{background: '#A3A3A3', margin: '10px 0px'}} /> */}
-          <Link href="#">
-            <MenuItem
-             className={resolvedTheme === "light" ? "light-save-btn" : "menuItem view_profile_btn"}
-              onClick={handleLogoutClick}
-            >
-              {/* <LogOut className='w-4 h-4 mr-3 text-gray-600' /> */}
-              Log Out
-            </MenuItem>
-          </Link>
-        </div>
+                {/* <Divider sx={{ my: 0.5 }} style={{background: '#A3A3A3', margin: '10px 0px'}} /> */}
+                <Link href="#">
+                  <MenuItem
+                   className={resolvedTheme === "light" ? "light-save-btn" : "menuItem view_profile_btn"}
+                    onClick={handleLogoutClick}
+                  >
+                    {/* <LogOut className='w-4 h-4 mr-3 text-gray-600' /> */}
+                    Log Out
+                  </MenuItem>
+                </Link>
+              </div>,
+            ]
+          : [
+              <Divider
+                key="login-divider"
+                sx={{ my: 0.5 }}
+                style={{ background: "#A3A3A3", margin: "10px 0px" }}
+              />,
+              <div key="login-action" className={styles.profiledropdown_info_area}>
+                <MenuItem
+                  className={resolvedTheme === "light" ? "light-save-btn" : "menuItem view_profile_btn"}
+                  onClick={handleLoginClick}
+                >
+                  Login
+                </MenuItem>
+              </div>,
+            ]}
       </Menu>
 
       <LogOutModal

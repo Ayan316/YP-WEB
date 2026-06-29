@@ -55,7 +55,6 @@ import {
   useTheme,
   Divider,
   Box,
-  Tooltip,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -1058,8 +1057,17 @@ export default function Header() {
                     )}
 
                   <div className={styles.profile_icon_area_main}>
-                    {isAuthenticated ? (
+                    {isResolving ? (
+                      // Neutral placeholder while the auth signal resolves — avoids
+                      // flashing the wrong (logged-in vs anonymous) UI.
+                      <div style={{ width: 58, height: 58 }} aria-hidden="true" />
+                    ) : (
+                      // Both logged-in and anonymous visitors get the profile
+                      // dropdown; it renders the correct variant (default photo +
+                      // Login for anonymous, avatar + account actions when logged
+                      // in) based on `isAuthenticated`.
                       <ProfileDropDown
+                        isAuthenticated={isAuthenticated}
                         onLogout={() => {
                           setIsLogoutOpen(true);
                         }}
@@ -1068,88 +1076,6 @@ export default function Header() {
                         setPathname={setPathname}
                         userProfile={userProfile}
                       />
-                    ) : isResolving ? (
-                      // Neutral placeholder while the auth signal resolves — avoids
-                      // flashing the wrong (logged-in vs anonymous) UI.
-                      <div style={{ width: 58, height: 58 }} aria-hidden="true" />
-                    ) : (
-                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <Tooltip title={isLight ? "Switch to dark mode" : "Switch to light mode"}>
-                          <button
-                            type="button"
-                            role="switch"
-                            aria-checked={!isLight}
-                            data-testid="theme-toggle"
-                            onClick={toggleAnonTheme}
-                            aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
-                            style={{
-                              position: "relative",
-                              display: "inline-flex",
-                              alignItems: "center",
-                              width: 60,
-                              height: 30,
-                              borderRadius: 9999,
-                              cursor: "pointer",
-                              padding: 3,
-                              background: isLight ? "#dbe4f0" : "#2a3550",
-                              border: isLight
-                                ? "1px solid rgba(0, 0, 0, 0.1)"
-                                : "1px solid rgba(255, 255, 255, 0.12)",
-                              transition: "background 0.3s ease, border-color 0.3s ease",
-                            }}
-                          >
-                            {/* Track icons */}
-                            <Sun
-                              size={14}
-                              color="#FFD54A"
-                              style={{
-                                position: "absolute",
-                                left: 7,
-                                opacity: isLight ? 0 : 1,
-                                transition: "opacity 0.3s ease",
-                              }}
-                            />
-                            <Moon
-                              size={14}
-                              color="#356FEE"
-                              style={{
-                                position: "absolute",
-                                right: 7,
-                                opacity: isLight ? 1 : 0,
-                                transition: "opacity 0.3s ease",
-                              }}
-                            />
-                            {/* Sliding knob */}
-                            <span
-                              style={{
-                                position: "absolute",
-                                top: 2,
-                                left: 3,
-                                width: 24,
-                                height: 24,
-                                borderRadius: "50%",
-                                background: "#ffffff",
-                                boxShadow: "0 1px 3px rgba(0, 0, 0, 0.3)",
-                                transform: isLight
-                                  ? "translateX(0)"
-                                  : "translateX(30px)",
-                                transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                              }}
-                            />
-                          </button>
-                        </Tooltip>
-                        <button
-                          type="button"
-                          onClick={() => router.push(authUrlWithTab("login"))}
-                          className={
-                            isLight
-                              ? 'light-apply-btn header-auth-btn'
-                              : `light-apply-btn header-auth-btn`
-                          }
-                        >
-                          Login
-                        </button>
-                      </div>
                     )}
                   </div>
                 </nav>
