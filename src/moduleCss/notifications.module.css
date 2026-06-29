@@ -1,0 +1,13 @@
+.notification_avatar {
+  border-radius: 10px;
+  min-width: 80px;
+  min-height: 80px;
+}
+.notification_admin_popup
+{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 15px;
+}

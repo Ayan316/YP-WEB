@@ -1,0 +1,637 @@
+.card_wrapper {
+  width: 100%;
+}
+.qrWrapper {
+  border-radius: 16px;
+  background-color: #ffffff;
+}
+.nameWrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: start;
+  display: flex;
+}
+.nameWrapper .user_name {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 20px;
+  color: #ffffff;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+.nameWrapper .section_title {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 20px;
+  color: #ffffff;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+.nameWrapper {
+  margin-bottom: 15px;
+}
+
+/* .profile_info{
+  font-family: var(--font-dm-sans);
+  font-weight: 300;
+  font-style: Light;
+  font-size: 20px;
+  color:#ffffff;
+  line-height: 100%;
+  letter-spacing: 0%;
+  margin-top: 15px;
+} */
+.profile_info.about_description {
+  margin-top: 0px;
+  font-family: var(--font-dm-sans);
+  font-weight: 300;
+  font-style: Light;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+}
+/* .location_wrapper{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+} */
+
+.profile_info {
+  font-family: var(--font-dm-sans);
+  font-weight: 300;
+  font-size: 14px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.2;
+  margin-top: 15px;
+}
+.profile_info.genderclass {
+  text-transform: capitalize;
+}
+
+/* Shared icon wrapper */
+.location_icon {
+  display: flex; /* important for Next/Image */
+  align-items: center;
+  justify-content: center;
+  color: #a0aec0;
+  width: 18px; /* consistent icon width */
+  height: 18px;
+  flex-shrink: 0; /* prevent collapse */
+}
+
+/* Normalize lucide icons */
+.location_icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.pageTitle {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 20px;
+  color: #ffffff;
+  line-height: 100%;
+  letter-spacing: 0%;
+  margin-bottom: 30px;
+}
+.top_area {
+  padding: 30px 0;
+}
+/* .educationItem_inner{
+position: relative;
+padding-left: 20px;
+ border-left: 1px solid transparent;
+  border-image-source: linear-gradient(
+    180deg,
+    #7F5AF0 0%,
+    rgba(115, 100, 241, 0.904087) 10.1%,
+    rgba(6, 193, 250, 0.05) 100%
+  );
+  border-image-slice: 1;
+} */
+
+.educationItem .edudation_label {
+  font-family: var(--font-dm-sans);
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 20px;
+  color: #ffffff;
+  line-height: 25px;
+  letter-spacing: 0px;
+}
+.educationItem .degree {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  color: #a0aec0;
+  margin-bottom: 5px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
+  /* Clamp to 2 lines with a trailing ellipsis so a runaway degree string
+     doesn't push the card into Skills below. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Flex child needs min-width: 0 so long unbreakable strings can wrap
+   instead of pushing the column past its parent's width. */
+.educationItem_inner {
+  min-width: 0;
+  flex: 1 1 0%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.educationItem .duration {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  color: #a0aec0;
+}
+.profileImageCard {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid #a0aec080;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.profileImage {
+  object-fit: cover;
+  border-radius: 100%;
+  position: unset !important;
+}
+
+/* Cap the chips region directly so a long skill list (many chips or long
+   labels that wrap) can't drive the card — and therefore the grid row —
+   taller. Chips overflow into an inner scroll inside the chip area. */
+.skillsCard .card_custom {
+  display: flex;
+  flex-direction: column;
+}
+.skillsCard .skills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  max-height: 110px;
+  overflow-y: auto;
+  margin-right: -12px;
+  padding-right: 12px;
+}
+.skillsCard .skills .skillPill {
+  padding: 5px 10px;
+  min-width: 80px;
+  border: 1px solid #ffffff;
+  background: #ffffff0d;
+  border-radius: 20px;
+  min-height: 35px;
+  font-family: var(--font-plus-jakarta);
+  font-weight: 400;
+  font-size: 13px;
+  color: #ffffff;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  align-content: center;
+  word-break: break-all;
+  /* line-height: 29px; */
+}
+
+/* .pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 20px;
+} */
+.pageTitle {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 25px;
+  color: #ffffff;
+  line-height: 100%;
+  letter-spacing: 0%;
+  margin-bottom: 0px;
+}
+.imageCard {
+  width: 130px;
+  height: 130px;
+  border: 100%;
+}
+
+.profile_imageedit_button {
+  border-radius: 30px;
+  border: 1px solid transparent;
+  padding: 0px 40px;
+  outline: none;
+  background:
+    linear-gradient(#040f1f, #040f1f) padding-box,
+    linear-gradient(91.13deg, #5433ff 2.22%, #20bdff 97.08%) border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 42px;
+  cursor: pointer;
+  color: #ffffff;
+}
+.remove_profile_photo_btn {
+  border-radius: 30px;
+  border: 1px solid #d80606;
+  padding: 0px 40px;
+  outline: none;
+  /* background: linear-gradient(#040f1f, #040f1f) padding-box,
+    linear-gradient(91.13deg, #5433ff 2.22%, #20bdff 97.08%) border-box; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 42px;
+  cursor: pointer;
+  color: #d80606;
+  margin-top: 10px;
+  max-width: 246px;
+  min-width: 246px;
+  font-weight: 700;
+}
+.imageseditedsection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 40px;
+}
+.imageseditedsection_userProfile {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 40px;
+}
+.floatingEdit p {
+  font-family: var(--font-dm-sans);
+  font-weight: 300;
+  font-style: Light;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  color: #a0aec0;
+  margin-top: 10px;
+}
+.editBtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  color: #ffffff;
+}
+.university_Image_area {
+  height: 80px;
+  width: 80px;
+  background-color: #FFF;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.university_Image_area img {
+  border-radius: 5px;
+}
+.education_wrapper {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+  align-items: flex-start;
+}
+.university_name {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  color: #ffffff;
+  margin-bottom: 5px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
+}
+.location_text {
+  display: flex;
+  align-items: end;
+  justify-content: flex-start;
+  gap: 3px;
+  font-family: DM Sans;
+  font-weight: 300;
+  font-style: Light;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: 0%;
+  color: #a0aec0;
+}
+.location_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 10px;
+  max-width: 200px;
+  word-break: break-word;
+  /* margin-right: auto; */
+}
+.profile_info_area {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+  row-gap: 15px;
+}
+.menuItem svg {
+  color: #ffffff;
+}
+.menuItem {
+  color: #ffffff;
+  cursor: pointer;
+}
+.profileImageCard {
+  min-height: 180px;
+  height: 100%;
+}
+
+.educationCard {
+  min-height: 180px;
+  height: 100%;
+}
+
+.profileGrid {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-auto-rows: minmax(0, auto);
+  column-gap: 0;
+  row-gap: 16px;
+  align-items: stretch;
+  margin-left: -8px;
+  margin-right: -8px;
+}
+
+.gridCell {
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gridCell > * {
+  flex: 1 1 auto;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .profileGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.current_situation_wrapper {
+  margin-top: 16px;
+}
+
+.current_situation_divider {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 12px 0;
+}
+
+.current_situation_label {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 500;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #ffffff;
+  margin: 0 0 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.current_situation_text {
+  font-family: var(--font-dm-sans);
+  font-weight: 300;
+  font-style: light;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  color: #ffffff;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+.current_situation_toggle {
+  font-family: var(--font-plus-jakarta);
+  font-size: 12px;
+  color: #20bdff;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin-top: 6px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+:global(:root:not(.dark)) .current_situation_divider {
+  border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+:global(:root:not(.dark)) .current_situation_label {
+  color: #040f1f;
+}
+
+:global(:root:not(.dark)) .current_situation_text {
+  color: #040f1f;
+}
+
+.card_wrapper {
+  min-height: 150px;
+}
+.about_description {
+  font-family: DM Sans;
+  font-weight: 300;
+  font-style: Light;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: 0%;
+  color: #a0aec0;
+  word-break: break-all;
+}
+
+@media screen and (max-width: 1280px) {
+  .card_wrapper {
+    height: auto;
+  }
+  .profile_info_area {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .skillsCard {
+    height: 100%;
+  }
+}
+@media screen and (max-width: 991px) {
+  .profile_icon_area_main {
+    margin-left: 30px;
+  }
+  .profileImageCard {
+    height: auto;
+    align-items: flex-start;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .location_wrapper {
+    max-width: 100%;
+  }
+  .profile_info_area {
+    flex-wrap: wrap;
+  }
+  .location_wrapper {
+    width: 100%;
+  }
+  .profileImageCard {
+    row-gap: 30px;
+    flex-wrap: wrap;
+  }
+  .profile_imageedit_button {
+    padding: 0 10px;
+  }
+  .imageCard {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+  }
+  .qrWrapper {
+    width: 100%;
+    height: 100%;
+  }
+  .qrWrapper img {
+    width: 100%;
+    height: 100%;
+  }
+  .imageseditedsection {
+    gap: 16px;
+  }
+  .imageseditedsection_userProfile {
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+  }
+  .imageseditedsection_userProfile > div:last-child {
+    flex: 1;
+    min-width: 0;
+  }
+}
+.top_area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Light mode overrides */
+:global(:root:not(.dark)) .pageTitle {
+  color: #040F1F;
+}
+
+:global(:root:not(.dark)) .nameWrapper .user_name {
+  color: #040F1F;
+}
+
+:global(:root:not(.dark)) .nameWrapper .section_title {
+  color: #040F1F;
+}
+
+:global(:root:not(.dark)) .educationItem .edudation_label {
+  color: #040F1F;
+}
+
+:global(:root:not(.dark)) .university_name {
+  color: #040F1F;
+}
+
+:global(:root:not(.dark)) .profile_info {
+  color: #888888;
+}
+
+:global(:root:not(.dark)) .about_description {
+  color: #888888;
+}
+
+:global(:root:not(.dark)) .educationItem .degree {
+  color: #888888;
+}
+
+:global(:root:not(.dark)) .educationItem .duration {
+  color: #888888;
+}
+
+:global(:root:not(.dark)) .location_text {
+  color: #888888;
+}
+
+:global(:root:not(.dark)) .floatingEdit p {
+  color: #888888;
+}
+
+:global(:root:not(.dark)) .profile_imageedit_button {
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(91.13deg, #356fee 2.22%, #1c98f7 97.08%) border-box;
+  color: #040F1F;
+}
+
+:global(:root:not(.dark)) .editBtn {
+  color: #040F1F;
+}
+
+:global(:root:not(.dark)) .menuItem {
+  color: #040F1F;
+}
+
+:global(:root:not(.dark)) .menuItem svg {
+  color: #040F1F;
+}
+
+:global(:root:not(.dark)) .skillsCard .skills .skillPill {
+  border: 1px solid #040F1F;
+  color: #040F1F;
+  background: #F4F6FF;
+}
+
+:global(:root:not(.dark)) .location_icon {
+  color: #888888;
+}
+
+:global(:root:not(.dark)) .profileImageCard {
+  border-color: #A0AEC080;
+  background-color: #F4F6FF;
+}

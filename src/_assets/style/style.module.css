@@ -1,0 +1,570 @@
+.header_area {
+  padding: 10px 16px;
+  padding-top: 10px;
+  padding-bottom: 0;
+}
+.header_area .border_bottom_header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #1a1a2e1a;
+}
+:global(.dark) .header_area .border_bottom_header {
+  border-bottom: 1px solid #ffffff1a;
+}
+.header_area_main {
+  /* background: #040f1f; */
+  background: transparent;
+  /* background: linear-gradient(295deg, rgb(23 79 102 / 20%) 16.35%, rgb(12 11 19 / 20%) 79.68%); */
+}
+
+.search_panel_area {
+  position: relative;
+  width: 100%;
+  transition: width all 0.3s ease-in-out;
+}
+.search_panel_area input {
+  border-radius: 30px;
+  border: 1px solid transparent;
+  padding: 0px 40px;
+  padding-right: 54px;
+  outline: none;
+  background: linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(91.13deg, #5433ff 2.22%, #20bdff 97.08%) border-box;
+  width: 100%;
+  height: 40px;
+  color: #1a1a2e;
+  font-size: 14px;
+}
+:global(.dark) .search_panel_area input {
+  background: linear-gradient(#040f1f, #040f1f) padding-box,
+    linear-gradient(91.13deg, #5433ff 2.22%, #20bdff 97.08%) border-box;
+  color: white;
+}
+:global(:root:not(.dark)) .search_panel_area input {
+  background: #ffffff;
+  border: 0.88px solid #a0aec0;
+  color: #1a1a2e;
+}
+:global(:root:not(.dark)) .search_panel_area .search_icon svg path {
+  fill: #888888;
+}
+:global(:root:not(.dark)) .search_panel_area .search_panel_filter_icon svg path {
+  stroke: #356fee;
+}
+.search_panel_area .search_panel_filter_icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 15px;
+  cursor: pointer;
+}
+.search_panel_area .search_icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 15px;
+  z-index: 9;
+}
+.navigation_area_main {
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2px;
+  display: flex;
+}
+.profile_image {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.layout_main_section_wrapper::-webkit-scrollbar {
+  display: none;
+}
+@media (max-width: 1440px) {
+  .search_panel_area {
+    /* max-width: 400px; */
+  }
+}
+
+.backgroundOverlay::after {
+  content: '';
+  position: fixed;
+  width: 50%;
+  height: 100%;
+  top: 0px;
+  right: 0;
+  background: linear-gradient(174.31deg, #1ebcff59 32.35%, #5433ff33 79.68%);
+  z-index: -1;
+  filter: blur(250px);
+}
+:global(.dark) .backgroundOverlay::after {
+  background: linear-gradient(174.31deg, #1ebcff59 32.35%, #5433ff33 79.68%);
+}
+:global(:root:not(.dark)) .backgroundOverlay::after {
+  background: linear-gradient(174.31deg, #1ebcff20 32.35%, #5433ff15 79.68%);
+}
+.search_form {
+  position: relative;
+  height: 40px;
+}
+.clear_search_button,
+.searching_indicator {
+  position: absolute;
+  right: 36px;
+  top: 54%;
+  transform: translateY(-50%);
+}
+.clear_search_button svg {
+  stroke: white;
+}
+:global(:root:not(.dark)) .clear_search_button svg {
+  stroke: #040F1F;
+}
+.filter_area_container {
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #a0aec080;
+  border-radius: 16px;
+  width: 100%;
+  padding: 16px;
+  margin-top: 16px;
+}
+:global(.dark) .filter_area_container {
+  background: rgba(4, 15, 31, 1);
+}
+.filter_title {
+  font-family: Plus Jakarta Sans;
+  font-weight: 600;
+  font-style: SemiBold;
+  leading-trim: NONE;
+  letter-spacing: 0%;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+  font-size: 20px;
+  line-height: 100%;
+  margin-bottom: 8px;
+}
+:global(.dark) .filter_title {
+  color: #fff;
+}
+.filter_dropdowns_container {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  display: flex;
+  margin-left: -8px;
+  margin-right: -8px;
+}
+.filter_dropdowns_container input:focus,
+.filter_dropdowns_container input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.filter_dropdowns_container > div {
+  flex: 1 1 30%;
+  max-width: 32%;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.filter_actions {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+}
+.clear_filters_button {
+  font-family: Plus Jakarta Sans;
+  font-weight: 600;
+  font-style: SemiBold;
+  leading-trim: NONE;
+  letter-spacing: 0%;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: 80px;
+  outline: none;
+  justify-content: center;
+  align-items: center;
+  /* margin-bottom: 8px; */
+  /* margin-left: auto; */
+  font-size: 14px;
+  line-height: 100%;
+  transition: all 0.3s ease-in-out;
+  /* display: flex; */
+  /* align-items: center; */
+  margin-left: 5px;
+  width: 100px;
+}
+.clear_filters_button:hover {
+  transform: scale(1.1);
+}
+.filter_actions .apply_filters_button {
+  font-family: Plus Jakarta Sans;
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 16px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  background: linear-gradient(90deg, #5433ff 0%, #23b8ff 100%);
+  border-radius: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  outline: none;
+  width: 140px;
+  height: 36px;
+  margin-bottom: 0px;
+}
+.filter_section {
+  margin-top: 16px;
+  margin-bottom: 10px;
+  width: 100%;
+  margin-left: auto;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.filter_section_closed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.filter_section_open {
+  max-height: 200px;
+  opacity: 1;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.headerScrolled {
+  background: #fff;
+}
+:global(.dark) .headerScrolled {
+  background: #040f1f;
+}
+
+.layout_main_content {
+  /* padding-bottom: 10px; */
+}
+.header_nav_Title {
+  font-family: Plus Jakarta Sans;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  color: #1a1a2e;
+}
+.header_nav_Title_active {
+  font-weight: 600;
+}
+:global(.dark) .header_nav_Title {
+  color: #ffffff;
+}
+.card_hoverBorder:hover {
+  position: relative;
+  border-radius: 16px;
+  background: rgba(32, 189, 255, 0.1);
+  z-index: 0;
+  border: none;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.card_hoverBorder:hover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    rgba(32, 189, 255, 0.5) 0%,
+    rgba(84, 51, 255, 0.5) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.navigation_area_main {
+  position: relative;
+}
+.filter_autocomplete_option {
+  color: #1a1a2e;
+  letter-spacing: 0%;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 100%;
+}
+:global(.dark) .filter_autocomplete_option {
+  color: #fff;
+}
+.profiledropdown_info_area {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+}
+.profiledropdown_icon_area {
+  height: 50px;
+  min-width: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.profiledropdown_icon_area img {
+  height: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  object-fit: cover;
+}
+.profiledropdown_name_area h3 {
+  font-family: Plus Jakarta Sans;
+  font-weight: 600;
+  font-style: SemiBold;
+  letter-spacing: 0%;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+  font-size: 20px;
+  line-height: 100%;
+}
+:global(.dark) .profiledropdown_name_area h3 {
+  color: #fff;
+}
+.profiledropdown_name_area p {
+  font-family: Plus Jakarta Sans;
+  font-weight: 600;
+  font-style: SemiBold;
+  letter-spacing: 0%;
+  color: #a3a3a3;
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 100%;
+}
+.profiledropdown_skills_area p {
+  font-family: Plus Jakarta Sans;
+  font-weight: 600;
+  font-style: SemiBold;
+  letter-spacing: 0%;
+  color: #a3a3a3;
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 18px;
+  word-break: break-all;
+}
+
+.sidebar_left_section,
+.sidebar_right_section {
+  padding: 0 16px;
+}
+.sidebar_left_section {
+  width: 30%;
+}
+.sidebar_right_section {
+  width: 70%;
+}
+@media screen and (max-width: 1366px) {
+  .filter_section {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 1280px) {
+  .filter_section_open {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 991px) {
+  .filter_dropdowns_container > div {
+    width: 100%;
+  }
+  .filter_section_open {
+    max-height: 100%;
+  }
+  .navigation_area_main {
+    gap: 0;
+  }
+}
+
+/* Add these animations to your existing style.module.css file */
+
+/* Drawer Animation Enhancements */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Hamburger Icon Animation */
+.hamburger-icon {
+  transition: transform 0.3s ease;
+}
+
+.hamburger-icon:active {
+  transform: scale(0.9);
+}
+
+/* Mobile Menu Item Animation */
+.mobile-menu-item {
+  animation: fadeIn 0.3s ease;
+}
+
+.mobile-menu-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.mobile-menu-item:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.mobile-menu-item:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.mobile-menu-item:nth-child(4) {
+  animation-delay: 0.25s;
+}
+
+.mobile-menu-item:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+.mobile-menu-item:nth-child(6) {
+  animation-delay: 0.35s;
+}
+
+/* Enhanced hover effects for nav items */
+.title-flex {
+  position: relative;
+  overflow: hidden;
+}
+
+.title-flex::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.title-flex:hover::before {
+  left: 100%;
+}
+
+/* Smooth scrolled header transition */
+.header_area_main {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.headerScrolled {
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Navigation indicator smooth transition */
+.nav-indicator {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Profile dropdown animation */
+.profile_icon_area_main {
+  transition: transform 0.2s ease;
+  margin-left: 30px;
+}
+
+/* .profile_icon_area_main:hover {
+  transform: translateY(-2px);
+} */
+
+/* Mobile drawer backdrop */
+.MuiBackdrop-root {
+  backdrop-filter: blur(4px);
+  transition: backdrop-filter 0.3s ease !important;
+}
+
+.jobDetails_job_item_btns {
+  height: 36px;
+  width: 150px !important;
+}
+.jobDetails_job_item_btns {
+  cursor: pointer;
+}
+/* Responsive breakpoints */
+@media (max-width: 1024px) {
+  .navigation_area_main {
+    display: none;
+  }
+}
+
+/* Active navigation item pulse effect */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.title-flex.active {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@media screen and (max-width: 767px) {
+  .clear_search_button {
+    position: absolute;
+    top: 16px;
+    right: 13px;
+    transform: unset;
+  }
+}
+
+

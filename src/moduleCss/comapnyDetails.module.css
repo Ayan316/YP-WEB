@@ -1,0 +1,418 @@
+.pageTitle {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 20px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #ffffff;
+  margin-bottom: 0px;
+}
+.pageHeader {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 30px 0;
+  gap: 8px;
+}
+.companyCoverImage_area {
+  width: 100%;
+  margin: 12px 0 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: rgba(32, 189, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  max-height: 350px;
+}
+
+.companyCoverImage_area img {
+  display: block;
+  border-radius: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  .companyCoverImage_area {
+    max-height: 260px;
+  }
+}
+.companyInfo_area_main_section {
+  border: 1px solid #a0aec080;
+  border-radius: 16px;
+  padding: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(12.354148864746094px);
+  margin-bottom: 20px;
+}
+.companyInfo_icon_area {
+  width: 100px;
+  height: 100px;
+}
+.companyInfo_icon_area img {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.companyInfo_area_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.companyInfo_area_wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.company_title {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 18px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+.companyInfo_lower_content {
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+  min-width: 360px;
+  gap: 5rem;
+}
+.companyInfo_content_icon {
+  font-family: var(--font-dm-sans);
+  font-weight: 300;
+  font-style: Light;
+  font-size: 14px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(160, 174, 192, 1);
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.companyInfo_lower_content_text {
+  font-family: var(--font-dm-sans);
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 14px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(255, 255, 255, 1);
+  margin-top: 10px;
+}
+
+.connect_button_wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+
+.website_btn {
+  width: 160px;
+  height: 48px;
+  border-radius: 87.62px;
+  border: 1px solid #20BDFF;
+  backdrop-filter: blur(12.354148864746094px);
+  background: transparent;
+  color: #ffffff;
+  font-family: Plus Jakarta Sans;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.light_website_btn {
+  border: 1px solid #356fee;
+  background: #EAF0FD;
+  color: #356fee;
+}
+
+.opportunities_btn {
+  width: 160px;
+  height: 48px;
+  border-radius: 87.62px;
+  border: none;
+  backdrop-filter: blur(12.354148864746094px);
+  background: linear-gradient(91.37deg, #5433FF 3.68%, #20BDFF 95.65%);
+  color: #ffffff;
+  font-family: Plus Jakarta Sans;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.follow_btn {
+  width: 160px;
+  height: 48px;
+  border-radius: 87.62px;
+  border: none;
+  backdrop-filter: blur(12.354148864746094px);
+  background: linear-gradient(91.37deg, #5433FF 3.68%, #20BDFF 95.65%);
+  color: #ffffff;
+  font-family: Plus Jakarta Sans;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.keywords_section_main,
+.website_section_main {
+  border: 1px solid #a0aec080;
+  border-radius: 16px;
+  padding: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(12.354148864746094px);
+  height: 100%;
+}
+.companyInfo_website {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 5px;
+  font-family: var(--font-dm-sans);
+  font-weight: 400;
+  font-style: Regular;
+  word-break: break-word;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(255, 255, 255, 1);
+}
+.keywords_item {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 400;
+  font-style: Regular;
+  leading-trim: NONE;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  color: #fff;
+  background: #ffffff0d;
+  border: 1px solid #ffffff80;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 15px;
+  margin-bottom: 0px;
+  vertical-align: middle;
+  line-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: fit-content;
+}
+
+.company_about_section {
+  border: 1px solid #a0aec080;
+  border-radius: 16px;
+  padding: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(12.354148864746094px);
+  height: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.company_about_section p {
+  font-family: var(--font-dm-sans);
+  font-weight: 300;
+  font-style: Light;
+  font-size: 16px;
+  leading-trim: NONE;
+  line-height: 20px;
+  letter-spacing: 0%;
+  color: rgba(255, 255, 255, 1);
+  max-height: 200px;
+  /* overflow-y: auto; */
+}
+
+.company_bottom_tab_name {
+  font-family: var(--font-plus-jakarta) !important;
+  font-weight: 600 !important;
+  font-style: SemiBold !important;
+  font-size: 18px !important;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #ffffff !important;
+}
+.company_bottom_tab_section {
+  border: 1px solid #a0aec080;
+  border-radius: 16px;
+  padding: 16px 0px;
+  overflow: hidden;
+  backdrop-filter: blur(12.354148864746094px);
+  margin-bottom: 20px;
+}
+.jobListing_more_jobs_cards {
+  display: flex;
+  margin-left: -8px;
+  margin-right: -8px;
+  flex-wrap: wrap;
+  /* Row spacing via gap (not the cards' margin-top) so it doesn't conflict with
+     the cards' height:100% — that conflict made each card overflow its column
+     by 16px and left a gap at the bottom of the list. */
+  row-gap: 16px;
+}
+
+/* Inside this grid the cards fill their column height (equal-height rows), so
+   apply height:100% here only — NOT on the base card class, which is also used
+   by the stacked Similar Jobs list. Also cancel the row-spacing margin-top the
+   base class carries for that stacked layout. */
+.jobListing_more_jobs_cards :global(.card-hover) {
+  margin-top: 0;
+  height: 100%;
+}
+/* .company_other_oppurtunities
+{
+  padding: 0px !important;
+} */
+
+.keywords_section_wrapper_inner {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.companyInfo_website_link {
+  color: #20bdff;
+  line-height: 20px;
+  text-align: left;
+}
+
+@media screen and (max-width: 767px) {
+  .companyInfo_area_container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .connect_button_wrapper {
+    position: static;
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+  .connect_button_wrapper button,
+  .connect_button_wrapper a {
+    width: auto !important;
+    min-width: unset;
+    flex: 1;
+    height: 40px !important;
+    font-size: 13px !important;
+    padding: 0 12px;
+  }
+  .companyInfo_lower_content {
+    justify-content: flex-start;
+    min-width: unset;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+}
+
+.company_bottom_tab_box {
+  border-bottom: 1px solid rgba(160, 174, 192, 0.5) !important;
+}
+
+.companyInfo_website svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Light mode overrides */
+:global(:root:not(.dark)) .pageTitle {
+  color: #040f1f;
+}
+
+:global(:root:not(.dark)) .company_title {
+  color: #040f1f;
+}
+
+:global(:root:not(.dark)) .companyInfo_lower_content_text {
+  color: #040f1f;
+}
+
+:global(:root:not(.dark)) .company_bottom_tab_name {
+  color: #040f1f !important;
+}
+
+:global(:root:not(.dark)) .companyInfo_content_icon {
+  color: #888888;
+}
+
+:global(:root:not(.dark)) .company_about_section p {
+  color: #888888;
+}
+
+:global(:root:not(.dark)) .companyInfo_website {
+  color: #040f1f;
+}
+
+:global(:root:not(.dark)) .keywords_item {
+  border: 1px solid #040f1f;
+  color: #040f1f;
+  background: #f4f6ff;
+}
+
+:global(:root:not(.dark)) .companyInfo_area_main_section {
+  background-color: #f4f6ff;
+  border: 1.5px solid #a0aec080;
+}
+
+:global(:root:not(.dark)) .keywords_section_main,
+:global(:root:not(.dark)) .website_section_main {
+  background-color: #f4f6ff;
+  border: 1.5px solid #a0aec080;
+}
+
+:global(:root:not(.dark)) .company_about_section {
+  background-color: #f4f6ff;
+  border: 1.5px solid #a0aec080;
+}
+
+:global(:root:not(.dark)) .company_bottom_tab_section {
+  background-color: #f4f6ff;
+  border: 1.5px solid #a0aec080;
+}
+
+:global(:root:not(.dark)) .connect_button_wrapper :global(.light-applied-btn) {
+  background: #eaf0fd !important;
+  color: #356fee !important;
+  border: 0.88px solid #356fee !important;
+}
+
+:global(:root:not(.dark)) .connect_button_wrapper :global(.light-apply-btn) {
+  background: linear-gradient(90deg, #356fee 0%, #1c98f7 100%) !important;
+  color: #fff !important;
+  border: none !important;
+}
+.company_bottom_tab_name {
+  max-width: fit-content !important;
+}
+
+.company_other_oppurtunities_inner {
+  max-height: 331px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  margin-right: -8px;
+}

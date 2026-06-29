@@ -1,0 +1,2180 @@
+/* =========================================================================
+   Resources — LISTING styles
+   Ported from `resources (2).html`, adapted to the repo's events.module.css
+   conventions (default = dark; light overrides via :global(:root:not(.dark))).
+   Detail styles will be added later — see the DETAIL section comment at the end.
+   ========================================================================= */
+
+/* ---------- Listing wrapper / layout (mirrors event listing shell) ------- */
+.resourceListing_main_section_wrapper,
+.sidebar_main_section {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar_main_section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.resourceListing_main_section {
+  border: 1px solid #a0aec080;
+  border-radius: 16px;
+  padding: 16px;
+  background: rgba(2, 12, 25, 0.33);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Light mode: drop the dark translucent wash (mirrors Jobs/Events main
+   section) so the panel sits cleanly on the white page. */
+:global(:root:not(.dark)) .resourceListing_main_section {
+  border: 1.5px solid #a0aec080;
+  background: transparent;
+}
+
+.resourceListing_main_section_title {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #ffffff;
+  word-break: break-word;
+  margin: 0;
+}
+
+.resourceListing_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  row-gap: 13px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.resourceListing_header_left {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 16px;
+}
+
+/* lede / tagline under the title */
+.lede {
+  font-family: var(--font-dm-sans, sans-serif);
+  margin: 4px 0 16px;
+  color: #a0aec0;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+:global(:root:not(.dark)) .lede {
+  color: #62748e;
+}
+
+/* ---------- Sidebar filter card (.side-card.filter-card / .filter-list) --- */
+.side_card {
+  border: 1px solid #a0aec080;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 15px;
+}
+
+.filter_card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.filter_card_title {
+  font-family: var(--font-plus-jakarta);
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 12px;
+  flex-shrink: 0;
+}
+
+:global(:root:not(.dark)) .filter_card_title {
+  color: #040f1f;
+}
+
+.filter_list {
+  list-style: none;
+  margin: 0;
+  padding: 0 4px 0 0;
+  font-family: var(--font-plus-jakarta);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.filter_list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.filter_list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter_list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+}
+
+:global(:root:not(.dark)) .filter_list::-webkit-scrollbar-thumb {
+  background: #d4dbe6;
+}
+
+.filter_list_item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #cbd5e1;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.filter_list_item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.filter_list_item.active {
+  color: #5b8cff;
+  font-weight: 700;
+}
+
+:global(:root:not(.dark)) .filter_list_item {
+  color: #364153;
+}
+
+:global(:root:not(.dark)) .filter_list_item:hover {
+  background: #f1f5f9;
+  color: #0f172b;
+}
+
+:global(:root:not(.dark)) .filter_list_item.active {
+  color: #155dfc;
+}
+
+.filter_list_item .lbl {
+  min-width: 0;
+  line-height: 1.25;
+}
+
+/* ---------- Category tab nav (Jobs-style sidebar) ----------------------- */
+.category_nav {
+  border: 1px solid #a0aec080;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 0;
+}
+
+.category_nav_scrollable {
+  max-height: 300px;
+  overflow-y: auto;
+}
+/* Scrollbar matched to the Resources listing (.list) — same 8px width, same
+   rounded thumb and colors, so the sidebar and the cards list read as one
+   consistent design. */
+.category_nav::-webkit-scrollbar {
+  width: 11px;
+}
+
+.category_nav::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 14px 0;
+}
+
+.category_nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  border-right: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+:global(:root:not(.dark)) .category_nav::-webkit-scrollbar-thumb {
+  background: #d4dbe6;
+}
+
+.category_nav_wrap {
+  display: contents;
+}
+
+.category_nav_scroll {
+  display: contents;
+}
+
+.category_dropdown_trigger {
+  display: none;
+}
+
+/* Skeleton placeholder bar for the loading tab list — one per category row,
+   spaced to match .category_nav_btn (container gap 10px + this margin 8px). */
+.category_nav_skeleton {
+  height: 16px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+.category_nav_btn {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: 0;
+  color: #a0aec0;
+  cursor: pointer;
+  margin-bottom: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+  /* Keep each item at its natural height so the capped flex column scrolls
+     instead of squashing (and clipping) the items. */
+  flex-shrink: 0;
+  /* Clamp a runaway category name to 2 lines with an ellipsis so one long
+     name can't blow up the vertical nav. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  transition: all 0.3s ease-in-out;
+}
+
+.category_nav_btn.active,
+.category_nav_btn:hover {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ---------- Search (.search) -------------------------------------------- */
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1d293d;
+  border: 1px solid #a0aec080;
+  border-radius: 30px;
+  padding: 10px 18px;
+  width: 340px;
+  max-width: 100%;
+}
+
+.search svg {
+  width: 18px;
+  height: 18px;
+  stroke: #90a1b9;
+  flex: none;
+}
+
+.search input {
+  border: none;
+  outline: none;
+  font-family: var(--font-dm-sans, sans-serif);
+  font-size: 15px;
+  width: 100%;
+  color: #ffffff;
+  background: transparent;
+}
+
+.search input::placeholder {
+  color: #90a1b9;
+}
+
+.search_clear {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #90a1b9;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  flex: none;
+}
+
+.search_sort_icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+  padding-left: 10px;
+  margin-left: 2px;
+  border-left: 1px solid #a0aec033;
+  transition: opacity 0.2s ease;
+}
+
+.search_sort_icon:hover {
+  opacity: 0.75;
+}
+
+.search_sort_icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: none;
+}
+
+:global(:root:not(.dark)) .search_sort_icon {
+  border-left: 1px solid #e2e8f0;
+}
+
+:global(:root:not(.dark)) .search {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+:global(:root:not(.dark)) .search input {
+  color: #0f172b;
+}
+
+:global(:root:not(.dark)) .search svg {
+  stroke: #90a1b9;
+}
+
+/* sort tools row */
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ---------- List scroll container + responsive grid --------------------- */
+/* Collapsible sort row — sized to its single dropdown so it doesn't steal
+   vertical space from the cards list (unlike the shared filter_section). */
+.sort_section {
+  width: 100%;
+  overflow: visible;
+  flex-shrink: 0;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out,
+    margin 0.3s ease-in-out;
+}
+
+.sort_section_closed {
+  max-height: 0;
+  opacity: 0;
+  margin: 0 0 10px;
+  overflow: hidden;
+}
+
+.sort_section_open {
+  max-height: 56px;
+  opacity: 1;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  /* Horizontal room (offset by the negative margin) so the card hover
+     scale-up isn't clipped by this scroll container. */
+  padding: 6px 10px;
+  margin: 8px -8px 0;
+}
+
+.list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+}
+
+:global(:root:not(.dark)) .list::-webkit-scrollbar-thumb {
+  background: #d4dbe6;
+}
+
+.r_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+@media (max-width: 720px) {
+  .r_grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Resource card (.r-card / .r-media / .r-body) ----------------- */
+.r_card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.18s ease, box-shadow 0.18s ease,
+    transform 0.18s ease, border-color 0.18s ease;
+}
+
+.r_card:hover {
+  border-color: #20bdff;
+  background-color: #20bdff1a;
+  transform: scale(1.02);
+}
+
+:global(:root:not(.dark)) .r_card {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+}
+
+:global(:root:not(.dark)) .r_card:hover {
+  border-color: #1c98f7;
+  background-color: #20bdff1a;
+  transform: scale(1.02);
+}
+
+.r_media {
+  position: relative;
+  width: 100%;
+  flex: none;
+  /* 16:8 cinematic media block (height follows the card width) — matches
+     the new handover card instead of the old fixed 160px strip. */
+  aspect-ratio: 16 / 8;
+  background: #1e293b;
+  overflow: hidden;
+}
+
+:global(:root:not(.dark)) .r_media {
+  background: #eef2f7;
+}
+
+/* Default placeholder shown when a resource has no thumbnail. */
+/* Type-aware placeholder (no preview image) — mirrors the mobile app's
+   ResourceCard cover: gradient (set inline) + two flat glow blobs + an
+   oversized faint glyph + a glass tile with glyph and type label. All
+   color-bearing values are set inline (per-type accent + theme) by the
+   component; this block only owns structure/position. */
+.r_media_fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  overflow: hidden;
+}
+
+/* Decorative glow blobs — flat translucent circles. Top-left is white,
+   bottom-right is the per-type accent (background-color set inline). */
+.r_glow_top,
+.r_glow_bottom {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.r_glow_top {
+  width: 150px;
+  height: 150px;
+  top: -50px;
+  left: -40px;
+}
+
+.r_glow_bottom {
+  width: 170px;
+  height: 170px;
+  bottom: -55px;
+  right: -30px;
+}
+
+/* Oversized faint glyph behind the tile for texture (color set inline). */
+.r_ghost_glyph {
+  position: absolute;
+  z-index: 0;
+  right: 10px;
+  bottom: -6px;
+  width: 120px;
+  height: 120px;
+  pointer-events: none;
+}
+
+.r_ghost_glyph svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Glass tile holding the centre glyph (background/border/color set inline). */
+.r_glass_tile {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  border: 1px solid transparent;
+}
+
+.r_glass_tile svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Type label under the tile (color set inline: white in dark, accent in light). */
+.r_media_fallback_label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-plus-jakarta);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Direct child only — the thumbnail. Avoids stretching the nested
+   fallback-placeholder icon to fill the whole media area. */
+.r_media > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+/* .r_media_yt > img {
+  object-fit: contain;
+  transform: scale(1.2);
+} */
+
+
+.r_media_yt > img {
+  object-fit: contain;
+  transform: scale(1.17);
+}
+
+
+
+.r_media_blur {
+  position: absolute;
+  inset: -16px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(16px) brightness(0.62);
+  transform: scale(1.08);
+}
+
+.r_media_play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 0;
+  pointer-events: none;
+}
+
+.r_media_play svg {
+  width: 48px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+.r_card:hover .r_media > img {
+  transform: scale(1.05);
+}
+
+.r_card:hover .r_media_yt > img {
+  transform: scale(1.26);
+}
+
+/* media_count pill (top-left) */
+.r_media_count {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 43, 0.85);
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-family: var(--font-plus-jakarta);
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+
+.r_media_count svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.r_body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px 16px;
+}
+
+.r_category {
+  align-self: flex-start;
+  max-width: 100%;
+  font-family: var(--font-plus-jakarta);
+  background: rgba(91, 140, 255, 0.16);
+  color: #5b8cff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 3px 10px;
+  border-radius: 14px;
+  /* Clamp a runaway category name to 2 lines with an ellipsis instead of
+     letting the chip grow into a wall of text. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+:global(:root:not(.dark)) .r_category {
+  background: #eff6ff;
+  color: #155dfc;
+}
+
+.r_title {
+  font-family: var(--font-plus-jakarta);
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #ffffff;
+  text-transform: capitalize;
+  /* Title is shown in FULL (no clamp) — the description auto-shrinks to
+     1 line when the title wraps past 2 lines (see CardText). */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+:global(:root:not(.dark)) .r_title {
+  color: #0f172b;
+}
+
+.r_excerpt {
+  margin: 0;
+  font-family: var(--font-dm-sans, sans-serif);
+  font-size: 14px;
+  color: #a0aec0;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+:global(:root:not(.dark)) .r_excerpt {
+  color: #62748e;
+}
+
+/* timestamp chip (top-right of media) */
+.r_date_chip {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172b;
+  border-radius: 20px;
+  padding: 5px 11px;
+  font-family: var(--font-plus-jakarta);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.r_date_chip svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  color: #5b8cff;
+}
+
+/* ---------- Empty state (.empty) ---------------------------------------- */
+.empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  color: #a0aec0;
+  padding: 60px 20px;
+  min-height: 50vh;
+  width: 100%;
+}
+
+:global(:root:not(.dark)) .empty {
+  color: #62748e;
+}
+
+.empty_title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 15px;
+  color: #ffffff;
+}
+
+:global(:root:not(.dark)) .empty_title {
+  color: #040f1f;
+}
+
+.empty_sub {
+  margin: 0;
+  font-size: 12px;
+  color: #a0aec0;
+}
+
+:global(:root:not(.dark)) .empty_sub {
+  color: #555;
+}
+
+/* =========================================================================
+   Resources — DETAIL styles
+   Ported from `event-details (1).html`, adapted to the repo conventions
+   (default = dark; light overrides via :global(:root:not(.dark))).
+   ========================================================================= */
+
+.detail {
+  padding-bottom: 40px;
+}
+
+/* ---------- Header (back button + page heading) ------------------------- */
+.detail_header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  margin-bottom: 20px;
+}
+
+.detail_back_btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.detail_heading {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 600;
+  font-size: 20px;
+  margin: 0;
+}
+
+.detail_error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  gap: 16px;
+}
+
+.detail_back_to_list_btn {
+  font-family: var(--font-plus-jakarta);
+  font-weight: 600;
+  font-size: 14px;
+  color: #ffffff;
+  background: linear-gradient(90deg, #5433ff 0%, #23b8ff 100%);
+  border: none;
+  border-radius: 80px;
+  padding: 10px 24px;
+  cursor: pointer;
+}
+
+/* ---------- Back link ("Back to Resources") ----------------------------- */
+.back_link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-family: var(--font-plus-jakarta);
+  font-size: 14px;
+  font-weight: 600;
+  color: #a0aec0;
+  margin-bottom: 18px;
+  cursor: pointer;
+}
+
+.back_link:hover {
+  color: #5b8cff;
+}
+
+:global(:root:not(.dark)) .back_link {
+  color: #62748e;
+}
+
+:global(:root:not(.dark)) .back_link:hover {
+  color: #155dfc;
+}
+
+.back_link svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- Top zone: header card (left) + side box (right) ------------- */
+.top_zone {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 26px;
+  align-items: start;
+  margin-bottom: 26px;
+}
+
+@media (max-width: 900px) {
+  .top_zone {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail_head {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+}
+
+:global(:root:not(.dark)) .detail_head {
+  border-color: #cbd5e1;
+}
+
+.cat_chip {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: var(--font-plus-jakarta);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #5b8cff;
+  background: rgba(91, 140, 255, 0.16);
+  padding: 4px 11px;
+  border-radius: 7px;
+  margin-bottom: 11px;
+}
+
+:global(:root:not(.dark)) .cat_chip {
+  color: #155dfc;
+  background: #eff6ff;
+}
+
+.detail_title {
+  font-family: var(--font-plus-jakarta);
+  margin: 0 0 16px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.26;
+  color: #ffffff;
+  text-transform: capitalize;
+  margin-top: 15px;
+  margin-bottom: 0px;
+}
+
+:global(:root:not(.dark)) .detail_title {
+  color: #0f172b;
+}
+
+/* ---------- Meta chip row (.dh-chips / .meta-chip) ---------------------- */
+.dh_chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  margin-top: 16px;
+}
+
+/* Inside the meta row the category sits in a .dh_info wrapper whose column
+   layout + margins pushed it out of line with the date pill / Share button.
+   Neutralize those so all three items share one vertically-centered row. */
+.dh_chips .dh_info {
+  flex: 0 0 auto;
+  margin-top: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.dh_chips .cat_chip {
+  margin-bottom: 0;
+}
+
+.meta_chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-plus-jakarta);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #a0aec0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 5px 11px;
+  border-radius: 20px;
+}
+
+:global(:root:not(.dark)) .meta_chip {
+  color: #62748e;
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.meta_chip svg {
+  width: 13px;
+  height: 13px;
+  color: #5b8cff;
+  flex: none;
+}
+
+:global(:root:not(.dark)) .meta_chip svg {
+  color: #155dfc;
+}
+
+/* ---------- Share icon + dropdown (in the meta row) --------------------- */
+.share_menu {
+  position: relative;
+  margin-left: auto;
+}
+
+.share_trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-plus-jakarta);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(91, 140, 255, 0.16);
+  border: 1px solid rgba(91, 140, 255, 0.45);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.share_trigger:hover {
+  background: rgba(91, 140, 255, 0.26);
+}
+
+.share_trigger svg {
+  width: 15px;
+  height: 15px;
+  color: #5b8cff;
+  flex: none;
+}
+
+:global(:root:not(.dark)) .share_trigger {
+  color: #155dfc;
+  background: rgba(21, 93, 252, 0.08);
+  border-color: rgba(21, 93, 252, 0.35);
+}
+
+:global(:root:not(.dark)) .share_trigger svg {
+  color: #155dfc;
+}
+
+.share_dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  min-width: 190px;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  border-radius: 12px;
+  background: #1d2f47;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+:global(:root:not(.dark)) .share_dropdown {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 12px 30px rgba(15, 23, 43, 0.12);
+}
+
+.share_dropdown_item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--font-plus-jakarta);
+  font-size: 14px;
+  font-weight: 500;
+  color: #e2e8f0;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.share_dropdown_item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.share_dropdown_item svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: #5b8cff;
+}
+
+:global(:root:not(.dark)) .share_dropdown_item {
+  color: #364153;
+}
+
+:global(:root:not(.dark)) .share_dropdown_item:hover {
+  background: #f1f5f9;
+}
+
+:global(:root:not(.dark)) .share_dropdown_item svg {
+  color: #155dfc;
+}
+
+/* ---------- Body container (styled like Job details description) -------- */
+.detail_body_wrapper {
+  margin-bottom: 26px;
+}
+
+.detail_body_content {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail_body_title {
+  font-family: var(--font-plus-jakarta);
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 14px;
+}
+
+:global(:root:not(.dark)) .detail_body_title {
+  color: #040f1f;
+}
+
+/* Description flows naturally with page scroll — no inner scrollbar */
+.detail_body_scroll {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* ---------- Sidebar Details box ----------------------------------------- */
+.detail_side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.side_box {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 22px;
+}
+
+:global(:root:not(.dark)) .side_box {
+  border-color: #cbd5e1;
+}
+
+.side_box_title {
+  font-family: var(--font-plus-jakarta);
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+:global(:root:not(.dark)) .side_box_title {
+  color: #0f172b;
+}
+
+.side_row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  font-size: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.side_row:first-of-type {
+  border-top: none;
+}
+
+:global(:root:not(.dark)) .side_row {
+  border-top-color: #e2e8f0;
+}
+
+.side_k {
+  color: #a0aec0;
+}
+
+:global(:root:not(.dark)) .side_k {
+  color: #62748e;
+}
+
+.side_v {
+  color: #ffffff;
+  font-weight: 600;
+  text-align: right;
+  font-family: var(--font-plus-jakarta);
+}
+
+:global(:root:not(.dark)) .side_v {
+  color: #0f172b;
+}
+
+/* ---------- Cover banner (single / blurred) ----------------------------- */
+.detail_cover_wrapper {
+  position: relative;
+  width: 100%;
+  height: 392px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 18px;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+:global(:root:not(.dark)) .detail_cover_wrapper {
+  background: #eef2f7;
+  border-color: #cbd5e1;
+}
+
+/* ---------- Cover banner (carousel) ------------------------------------- */
+/* .detail_cover_slider {
+  margin-top: 18px;
+} */
+
+.detail_cover_carousel {
+  position: relative;
+}
+
+.detail_cover_carousel_content {
+  margin-left: 0 !important;
+}
+
+.detail_cover_slide {
+  padding-left: 0 !important;
+}
+
+.detail_cover_slide .detail_cover_wrapper {
+  margin-top: 0;
+}
+
+.detail_cover_counter {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  z-index: 3;
+}
+
+/* Media-type chip (top-left of the cover frame) — reflects the current slide */
+.detail_cover_type_chip {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(6px);
+  font-family: var(--font-plus-jakarta);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.detail_cover_type_chip_icon {
+  display: inline-flex;
+  align-items: center;
+  color: #5b8cff;
+}
+
+.detail_cover_type_chip_icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.detail_cover_type_chip_label {
+  color: #ffffff;
+}
+
+:global(:root:not(.dark)) .detail_cover_type_chip {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: #e2e8f0;
+}
+
+:global(:root:not(.dark)) .detail_cover_type_chip_icon {
+  color: #155dfc;
+}
+
+:global(:root:not(.dark)) .detail_cover_type_chip_label {
+  color: #0f172b;
+}
+
+.detail_cover_thumbnails {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.detail_cover_thumbnails::-webkit-scrollbar {
+  height: 4px;
+}
+
+.detail_cover_thumbnails::-webkit-scrollbar-thumb {
+  background: rgba(160, 174, 192, 0.3);
+  border-radius: 4px;
+}
+
+.detail_cover_thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 80px;
+  height: 60px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  padding: 0;
+  background: none;
+  opacity: 0.6;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.detail_cover_thumb:hover {
+  opacity: 0.85;
+}
+
+.detail_cover_thumb_active {
+  opacity: 1;
+  border-color: #00b4d8;
+}
+
+/* ---------- Body (.detail-main / .lede / .detail-body) ------------------ */
+.detail_main {
+  margin-bottom: 26px;
+}
+
+.lede {
+  /* keep the listing-level .lede; detail lede handled via body typography */
+}
+
+.detail_body {
+  font-family: var(--font-dm-sans, sans-serif);
+}
+
+.detail_body p {
+  font-size: 16px;
+  line-height: 1.8;
+  margin: 0 0 18px;
+}
+
+.detail_body blockquote {
+  margin: 24px 0;
+  padding: 6px 0 6px 20px;
+  border-left: 3px solid #5b8cff;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+:global(:root:not(.dark)) .detail_body blockquote {
+  border-left-color: #155dfc;
+}
+
+/* ---------- Media gallery (non-image attachments) ----------------------- */
+.media_gallery {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 26px;
+}
+
+:global(:root:not(.dark)) .media_gallery {
+  border-color: #cbd5e1;
+}
+
+.media_gallery_title {
+  font-family: var(--font-plus-jakarta);
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+:global(:root:not(.dark)) .media_gallery_title {
+  color: #0f172b;
+}
+
+.media_gallery_grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.media_item {
+  width: 100%;
+}
+
+.media_video {
+  width: 100%;
+  max-height: 480px;
+  border-radius: 12px;
+  background: #000;
+  display: block;
+}
+
+.media_audio {
+  width: 100%;
+}
+
+.media_link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-family: var(--font-plus-jakarta);
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 12px 16px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.media_link:hover {
+  border-color: #5b8cff;
+  background: rgba(91, 140, 255, 0.1);
+}
+
+:global(:root:not(.dark)) .media_link {
+  color: #0f172b;
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+:global(:root:not(.dark)) .media_link:hover {
+  border-color: #155dfc;
+  background: #eff6ff;
+}
+
+.media_link svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  color: #5b8cff;
+}
+
+:global(:root:not(.dark)) .media_link svg {
+  color: #155dfc;
+}
+
+/* ---------- Header-card top row: logo + info --------------------------- */
+.dh_top {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+}
+
+@media (max-width: 560px) {
+  .dh_top {
+    gap: 16px;
+  }
+}
+
+.dh_logo {
+  width: 84px;
+  height: 84px;
+  flex: none;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  overflow: hidden;
+}
+
+:global(:root:not(.dark)) .dh_logo {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #cbd5e1;
+}
+
+.dh_logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.dh_info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.dh_source {
+  color: #a0aec0;
+  font-size: 14px;
+  margin: 0;
+}
+
+:global(:root:not(.dark)) .dh_source {
+  color: #62748e;
+}
+
+/* ---------- Sidebar actions / primary button -------------------------- */
+.side_actions {
+  margin-top: 18px;
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.btn_primary {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  font-family: var(--font-plus-jakarta);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  padding: 15px 24px;
+  border-radius: 26px;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+  transition: filter 0.15s ease;
+}
+
+.btn_primary:hover {
+  filter: brightness(1.06);
+}
+
+.btn_primary svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+/* ---------- Share box -------------------------------------------------- */
+.share_stack {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.share_item {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0 20px;
+  cursor: pointer;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: #ffffff;
+  font-family: var(--font-plus-jakarta);
+  font-size: 15px;
+  font-weight: 600;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.share_item:hover {
+  border-color: #5b8cff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.share_item svg {
+  width: 21px;
+  height: 21px;
+  flex: none;
+  color: #5b8cff;
+}
+
+:global(:root:not(.dark)) .share_item {
+  border-color: #cbd5e1;
+  color: #0f172b;
+}
+
+:global(:root:not(.dark)) .share_item:hover {
+  border-color: #155dfc;
+  background: #eff6ff;
+}
+
+:global(:root:not(.dark)) .share_item svg {
+  color: #155dfc;
+}
+
+/* ---------- Unified slider: non-image slide types --------------------- */
+.detail_slide_video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+  z-index: 2;
+}
+
+/* ---------- Custom video player (media-chrome) ------------------------- */
+/* Themes the media-chrome <media-controller>: white native-style controls over
+   the black video frame, a centered −10 / play / +10 overlay, and an
+   auto-hiding bottom control bar. Theme-independent (controls sit on the dark
+   video). */
+.video_player {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  --media-font-family: var(--font-plus-jakarta);
+  --media-primary-color: #ffffff;
+  --media-secondary-color: rgba(0, 0, 0, 0.4);
+  --media-text-color: #ffffff;
+  --media-control-background: transparent;
+  --media-control-hover-background: rgba(255, 255, 255, 0.16);
+  --media-range-track-height: 5px;
+  --media-range-track-background: rgba(255, 255, 255, 0.28);
+  --media-range-bar-color: #ffffff;
+  --media-range-thumb-background: #ffffff;
+  --media-time-range-buffered-color: rgba(255, 255, 255, 0.45);
+}
+
+.video_el {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+/* Centered overlay controls — −10s / play / +10s */
+.video_center_chrome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  pointer-events: none;
+}
+
+.video_center_btn,
+.video_center_play {
+  pointer-events: auto;
+  border-radius: 50%;
+  --media-control-background: rgba(20, 24, 35, 0.55);
+  --media-control-hover-background: rgba(20, 24, 35, 0.78);
+}
+
+.video_center_btn {
+  width: 58px;
+  height: 58px;
+  --media-button-icon-width: 24px;
+  --media-button-icon-height: 24px;
+}
+
+.video_center_play {
+  width: 84px;
+  height: 84px;
+  --media-button-icon-width: 38px;
+  --media-button-icon-height: 38px;
+}
+
+/* Bottom control bar */
+.video_controlbar {
+  width: 100%;
+  padding: 8px 10px 10px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+  --media-control-height: 40px;
+}
+
+.video_timerange {
+  flex: 1 1 auto;
+}
+
+.detail_slide_audio_panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  padding: 24px;
+  background: linear-gradient(135deg, #1e293b, #334155);
+  z-index: 2;
+}
+
+:global(:root:not(.dark)) .detail_slide_audio_panel {
+  background: linear-gradient(135deg, #e0e7ff, #eff6ff);
+}
+
+.detail_slide_doc_panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 24px;
+  background: linear-gradient(135deg, #1e293b, #334155);
+  z-index: 2;
+}
+
+:global(:root:not(.dark)) .detail_slide_doc_panel {
+  background: linear-gradient(135deg, #e0e7ff, #eff6ff);
+}
+
+.detail_slide_audio_disc {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(91, 140, 255, 0.18);
+  color: #5b8cff;
+}
+
+.detail_slide_audio_disc svg {
+  width: 44px;
+  height: 44px;
+}
+
+:global(:root:not(.dark)) .detail_slide_audio_disc {
+  background: rgba(21, 93, 252, 0.12);
+  color: #155dfc;
+}
+
+.detail_slide_audio {
+  width: 100%;
+  max-width: 460px;
+}
+
+/* ---------- Web audio FILE player (mobile-app style) -------------------- */
+/* Horizontal: a large circular play button on the LEFT, then a column with a
+   "Audio" label, the seekable WAVEFORM, and the times split (current left /
+   total right). Wrapped in a card BOX. DARK is the default; LIGHT overrides
+   via :root:not(.dark). */
+.file_player {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 18px 22px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 18px 44px rgba(2, 6, 24, 0.45);
+  font-family: var(--font-plus-jakarta);
+}
+
+:global(:root:not(.dark)) .file_player {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 14px rgba(15, 23, 43, 0.08);
+}
+
+/* Large circular play / pause — anchors the left */
+.file_play_round {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  flex: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #ffffff;
+  background: linear-gradient(135deg, #5433ff 0%, #23b8ff 100%);
+  box-shadow: 0 12px 28px rgba(36, 99, 235, 0.45);
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.file_play_round:hover {
+  filter: brightness(1.06);
+  transform: scale(1.04);
+}
+
+:global(:root:not(.dark)) .file_play_round {
+  background: linear-gradient(135deg, #3b82f6 0%, #155dfc 100%);
+  box-shadow: 0 12px 28px rgba(21, 93, 252, 0.32);
+}
+
+/* Right column */
+.file_main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file_label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5b8cff;
+}
+
+:global(:root:not(.dark)) .file_label {
+  color: #155dfc;
+}
+
+.file_label_text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+:global(:root:not(.dark)) .file_label_text {
+  color: #0f172b;
+}
+
+/* Seekable waveform */
+.file_wave {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 40px;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.file_wave:focus-visible {
+  outline: 2px solid #5b8cff;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+:global(:root:not(.dark)) .file_wave:focus-visible {
+  outline-color: #155dfc;
+}
+
+.file_wave_bar {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 30%;
+  border-radius: 4px;
+  background: rgba(160, 174, 192, 0.4);
+  transition: background 0.15s ease;
+}
+
+:global(:root:not(.dark)) .file_wave_bar {
+  background: #cbd5e1;
+}
+
+.file_wave_bar_played {
+  background: linear-gradient(180deg, #5b8cff, #23b8ff);
+}
+
+:global(:root:not(.dark)) .file_wave_bar_played {
+  background: linear-gradient(180deg, #3b82f6, #155dfc);
+}
+
+/* Times: current (left) / total (right) */
+.file_times {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.file_time {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a0aec0;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+:global(:root:not(.dark)) .file_time {
+  color: #62748e;
+}
+
+@media (max-width: 1280px) {
+  .category_nav_wrap {
+    display: block;
+    margin-bottom: 15px;
+  }
+
+  .category_dropdown_trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    border: 1px solid #a0aec080;
+    border-radius: 16px;
+    padding: 14px 16px;
+    background: none;
+    cursor: pointer;
+    font-family: var(--font-plus-jakarta);
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: left;
+  }
+
+  .category_dropdown_trigger_open {
+    display: none;
+  }
+
+  .category_dropdown_label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .category_dropdown_chevron {
+    flex: none;
+    transition: transform 0.2s ease;
+  }
+
+  .category_dropdown_chevron_open {
+    transform: rotate(180deg);
+  }
+
+  .category_nav {
+    margin-top: 8px;
+    margin-bottom: 0;
+    max-height: none;
+    overflow: hidden;
+  }
+
+  .category_nav_closed {
+    display: none;
+  }
+
+  .category_nav_open {
+    margin-top: 0;
+  }
+
+  .category_nav_scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    min-height: 0;
+    overflow-x: hidden;
+  }
+
+  .category_nav_scrollable .category_nav_scroll {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .category_nav_scroll::-webkit-scrollbar {
+    width: 11px;
+  }
+
+  .category_nav_scroll::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 14px 0;
+  }
+
+  .category_nav_scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    border-right: 3px solid transparent;
+    background-clip: padding-box;
+  }
+
+  :global(:root:not(.dark)) .category_nav_scroll::-webkit-scrollbar-thumb {
+    background: #d4dbe6;
+  }
+}
+
+@media (max-width: 480px) {
+  .file_player {
+    gap: 16px;
+  }
+  .file_play_round {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+.detail_slide_frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+  z-index: 2;
+}
+
+.detail_slide_frame_link {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  font-family: var(--font-plus-jakarta);
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 20px;
+  padding: 7px 14px;
+  backdrop-filter: blur(4px);
+}
+
+.detail_slide_frame_link:hover {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+/* doc / file panel link sits inline, not floating */
+.detail_slide_doc_panel .detail_slide_frame_link {
+  position: static;
+  background: rgba(91, 140, 255, 0.16);
+  color: #5b8cff;
+}
+
+:global(:root:not(.dark)) .detail_slide_doc_panel .detail_slide_frame_link {
+  background: rgba(21, 93, 252, 0.12);
+  color: #155dfc;
+}
+
+/* ---------- react-pdf viewer (PDF slide) -------------------------------- */
+/* ---------- Document viewer (@cyntler/react-doc-viewer) ---------------- */
+.doc_viewer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  background: #1e293b;
+}
+
+:global(:root:not(.dark)) .doc_viewer {
+  background: #ffffff;
+}
+
+/* Let react-doc-viewer fill the slide frame (header disabled) */
+.doc_viewer > div {
+  width: 100%;
+  height: 100%;
+}
+
+.doc_viewer :global(#react-doc-viewer) {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border-radius: 0;
+}
+
+/* Belt-and-suspenders: hide the header bar even if it renders */
+.doc_viewer :global(#header-bar) {
+  display: none !important;
+}
+
+.doc_viewer :global(#proxy-renderer) {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+}
+
+.doc_viewer :global(#msdoc-renderer),
+.doc_viewer :global(#pdf-renderer),
+.doc_viewer :global(#image-renderer) {
+  width: 100%;
+  height: 100%;
+}
+
+.doc_viewer :global(#msdoc-iframe) {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Native PDF iframe (browser's built-in viewer) */
+.doc_viewer_frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* ---- Hide react-doc-viewer's PDF toolbar + header (clean view) -------- */
+.doc_viewer :global(#pdf-controls),
+.doc_viewer :global(#header-bar) {
+  display: none !important;
+}
+
+/* Floating download — used for Office docs (DOCX) which have no toolbar */
+.doc_viewer_dl {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: #ffffff;
+  text-decoration: none;
+  background: linear-gradient(135deg, #5433ff, #23b8ff);
+  box-shadow: 0 6px 16px rgba(36, 99, 235, 0.4);
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.doc_viewer_dl:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+:global(:root:not(.dark)) .doc_viewer_dl {
+  background: linear-gradient(135deg, #3b82f6, #155dfc);
+  box-shadow: 0 6px 16px rgba(21, 93, 252, 0.3);
+}
+
+.doc_viewer_loading {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-plus-jakarta);
+  font-size: 14px;
+  color: #a0aec0;
+  background: #1e293b;
+}
+
+:global(:root:not(.dark)) .doc_viewer_loading {
+  color: #62748e;
+  background: #ffffff;
+}
+
+/* ---------- Thumbnail icon tile (non-image slides) -------------------- */
+.detail_cover_thumb_icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1e293b;
+  color: #5b8cff;
+}
+
+.detail_cover_thumb_icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+:global(:root:not(.dark)) .detail_cover_thumb_icon {
+  background: #eef2f7;
+  color: #155dfc;
+}

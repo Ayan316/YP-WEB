@@ -1,0 +1,15 @@
+{
+  "courses": [
+    { "id": 1, "name": "Year 10 / S3 / 3rd Year" },
+    { "id": 2, "name": "Year 11 / S4 / 4th Year" },
+    { "id": 3, "name": "Year 12 / S5 / TY Year" },
+    { "id": 4, "name": "Year 13 / S6 / 6th Year (Y14 NI)" },
+    { "id": 5, "name": "Taking a gap year" },
+    { "id": 6, "name": "1st Year University" },
+    { "id": 7, "name": "2nd Year University" },
+    { "id": 8, "name": "3rd Year University" },
+    { "id": 9, "name": "Post Graduate" },
+    { "id": 10, "name": "Finished Education / Actively looking for work" },
+    { "id": 11, "name": "Other" }
+  ]
+}
