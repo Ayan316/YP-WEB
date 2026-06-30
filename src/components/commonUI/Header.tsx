@@ -90,6 +90,12 @@ export default function Header() {
   const { data: session, status: sessionStatus } = useSession();
   const { data: hasSession } = useHasSession();
   const [cookieUser, setCookieUser] = useState<any>(null);
+  // Optimistic auth hint persisted across refreshes. Neither useSession nor
+  // useHasSession resolves synchronously, so on a hard refresh we don't yet
+  // know if the visitor is logged in. We remember the last definitive result
+  // and apply it on the next load so account-only nav (Notifications) renders
+  // correctly on first paint instead of flashing in/out. `null` = unknown.
+  const [authHint, setAuthHint] = useState<"authed" | "anon" | null>(null);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -161,8 +167,15 @@ export default function Header() {
     sessionStatus === "authenticated" ||
     hasSession === true ||
     !!userProfile?.data?.id;
-  // While the signals are still loading we don't yet KNOW the user is anonymous.
-  const isResolving = sessionStatus === "loading" && hasSession === undefined;
+  // `hasSession` is the authoritative auth signal and is now seeded server-side
+  // (see ReactQueryProvider) from the httpOnly cookie, so it is already known
+  // (true/false) on the FIRST render after a hard refresh — never `undefined`.
+  // So "resolving" (auth still unknown) reduces to `hasSession` not yet being
+  // available. We intentionally do NOT gate on `sessionStatus === "loading"`:
+  // next-auth only covers social login (which ALSO sets the cookie), so keying
+  // off its transient "loading" state would flash the avatar/account skeleton
+  // for a visitor we already know is logged OUT (hasSession === false) on refresh.
+  const isResolving = hasSession === undefined;
   const showAvatarSkeleton = isResolving || (isAuthenticated && userProfileLoading);
 
   // Build the auth URL (already carries ?callbackUrl=<safe-path> when worth
@@ -230,10 +243,13 @@ export default function Header() {
     // },
   ];
 
-  // Notifications is account-only: show it while authenticated, and keep it
-  // visible while the auth signal is still resolving (anti-flicker). Hide it
-  // only when the visitor is definitively anonymous.
-  const showNotifications = isAuthenticated || isResolving;
+  // Notifications is account-only. Show it once authenticated; while the auth
+  // signal is still resolving, fall back to the persisted optimistic hint so a
+  // returning logged-in user sees it immediately and an anonymous visitor never
+  // sees it flash in then out on refresh. With no hint yet (first-ever visit)
+  // the default is hidden — the safe, flicker-free choice for anonymous users.
+  const showNotifications =
+    isAuthenticated || (isResolving && authHint === "authed");
   const visibleNavItems = showNotifications
     ? navigationItems
     : navigationItems.filter((i) => i.path !== "/notifications");
@@ -267,6 +283,26 @@ export default function Header() {
       }
     })();
   }, []);
+
+  // Load the persisted auth hint after mount (kept out of the initial render so
+  // first paint stays deterministic and SSR/hydration can't mismatch).
+  useEffect(() => {
+    try {
+      const v = window.localStorage.getItem("yp_auth_hint");
+      if (v === "authed" || v === "anon") setAuthHint(v);
+    } catch {}
+  }, []);
+
+  // Persist the hint once the auth signal is definitively known, so the next
+  // refresh renders the correct nav on first paint.
+  useEffect(() => {
+    if (isResolving) return;
+    const next: "authed" | "anon" = isAuthenticated ? "authed" : "anon";
+    setAuthHint(next);
+    try {
+      window.localStorage.setItem("yp_auth_hint", next);
+    } catch {}
+  }, [isAuthenticated, isResolving]);
 
   const displayName =
     session?.user?.name || cookieUser?.full_name || cookieUser?.name || "";

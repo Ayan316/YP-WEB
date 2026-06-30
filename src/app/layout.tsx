@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
+import { cookies } from 'next/headers'
 import { DM_Sans, Alumni_Sans_SC, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import Providers from './providers/Providers'
+import { ACCESS_COOKIE, REFRESH_COOKIE } from '@/lib/authCookies'
 import { Zoom, ToastContainer } from 'react-toastify'
 import BackgroundOverlay from '@/components/ui/BackgroundOverlay'
 
@@ -33,11 +35,20 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout ({
+export default async function RootLayout ({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Read the httpOnly auth cookie server-side (the browser can't) so the client
+  // knows on first paint whether the visitor is logged in. Mirrors the check in
+  // /api/auth/has-session. Seeds the `has-session` query via Providers so the
+  // navbar's account-only items render correctly on a hard refresh.
+  const cookieStore = await cookies()
+  const initialHasSession = Boolean(
+    cookieStore.get(ACCESS_COOKIE)?.value || cookieStore.get(REFRESH_COOKIE)?.value
+  )
+
   return (
     <html lang='en' suppressHydrationWarning>
       <head>
@@ -71,7 +82,7 @@ export default function RootLayout ({
         style={{ overflowX: 'hidden', paddingRight: '0px !important' }}
       >
         <BackgroundOverlay />
-        <Providers>{children}</Providers>
+        <Providers initialHasSession={initialHasSession}>{children}</Providers>
         {/* {children} */}
 
         {/* Toast Container for toast messages */}

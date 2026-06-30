@@ -1,5 +1,5 @@
 'use client'
-import { MapPin, Info, User, Send, ExternalLink, Bookmark, ChevronDown, Check } from 'lucide-react'
+import { MapPin, Info, User, Bookmark } from 'lucide-react'
 import BuildingIcon from '@/_assets/icons/header_icons/clarity_building-solid.svg'
 import styles from '../../moduleCss/jobDetails.module.css'
 import Image from 'next/image'
@@ -588,35 +588,25 @@ export default function JobDetails ({ jobId }: Props) {
               .jd-action-btn:hover::after {
                 opacity: 1; transform: translateX(-50%) scale(1);
               }
+              /* Text action buttons reuse the project pill styles but size to
+                 their label (the base classes hard-pin width:120px). */
+              .jd-text-btn {
+                width: 190px !important;
+                padding: 0 22px !important;
+                height: 40px !important;
+                white-space: nowrap;
+                cursor: pointer;
+              }
+              .jd-text-btn:disabled { cursor: default; }
             `}</style>
 
-            {/* Action buttons — top right */}
-            <div className={styles.jobDetails_header_actions} style={{ display: 'flex', gap: 8, zIndex: 2 }}>
-              {/* Apply / Applied */}
-              <button
-                className='jd-action-btn'
-                data-tooltip={isAppliedFlag(job?.data?.applied_jobs) ? 'Applied' : job?.data?.job_link ? 'Apply on website' : 'Apply Job'}
-                disabled={applyingJobIds.has(jobId) || isAppliedFlag(job?.data?.applied_jobs)}
-                onClick={handleApply}
-                style={{
-                  width: 40, height: 40, borderRadius: '50%', border: 'none', padding: 0,
-                  background: isAppliedFlag(job?.data?.applied_jobs)
-                    ? (isLight ? '#e8f5e9' : 'rgba(76,175,80,0.15)')
-                    : 'linear-gradient(135deg, #5433ff, #23b8ff)',
-                  color: isAppliedFlag(job?.data?.applied_jobs) ? '#4caf50' : '#fff',
-                  cursor: isAppliedFlag(job?.data?.applied_jobs) ? 'default' : 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: isAppliedFlag(job?.data?.applied_jobs) ? 'none' : '0 4px 14px rgba(84,51,255,0.35)',
-                  transition: 'all 0.2s',
-                }}
-              >
-                {isAppliedFlag(job?.data?.applied_jobs) ? <Check size={18} />
-                  : applyingJobIds.has(jobId) ? <span style={{ width: 16, height: 16, border: '2px solid #fff', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-                  : job?.data?.job_link ? <ExternalLink size={18} />
-                  : <Send size={18} />}
-              </button>
-
-              {/* Save / Unsave */}
+            {/* Action buttons — top right, stacked vertically:
+                Save (icon) → Apply (text) → View Similar Job (text). */}
+            <div
+              className={styles.jobDetails_header_actions}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 20, zIndex: 2 }}
+            >
+              {/* Save / Unsave — icon button (kept as-is) */}
               <button
                 className='jd-action-btn'
                 data-tooltip={isSavedFlag(job?.data?.saved_jobs) ? 'Saved' : 'Save Job'}
@@ -639,31 +629,36 @@ export default function JobDetails ({ jobId }: Props) {
                   : isSavedFlag(job?.data?.saved_jobs) ? <Bookmark size={18} fill="currentColor" /> : <Bookmark size={18} />}
               </button>
 
-              {/* View Similar Jobs — bouncing arrow */}
+              {/* Apply on Website / Apply Now — text button */}
+              <button
+                className={
+                  isLight
+                    ? `${isAppliedFlag(job?.data?.applied_jobs) ? 'light-applied-btn' : 'light-apply-btn'} jd-text-btn`
+                    : `btn-gradient jd-text-btn ${isAppliedFlag(job?.data?.applied_jobs) ? 'apply-btn' : ''}`
+                }
+                disabled={applyingJobIds.has(jobId) || isAppliedFlag(job?.data?.applied_jobs)}
+                onClick={handleApply}
+              >
+                {applyingJobIds.has(jobId)
+                  ? 'Applying...'
+                  : isAppliedFlag(job?.data?.applied_jobs)
+                  ? 'Applied'
+                  : job?.data?.job_link
+                  ? 'Apply on Website'
+                  : 'Apply Now'}
+              </button>
+
+              {/* View Similar Job — text button */}
               {uniqueCompanyJobs.length > 0 && (
                 <button
-                  className='jd-action-btn'
-                  data-tooltip='View Similar Jobs'
+                  className={
+                    isLight
+                      ? 'light-save-btn jd-text-btn'
+                      : 'social-media-btn gradient-border-btn jd-text-btn'
+                  }
                   onClick={() => document.getElementById('similar-jobs-section')?.scrollIntoView({ behavior: 'smooth' })}
-                  style={{
-                    width: 40, height: 40, borderRadius: '50%', padding: 0,
-                    border: isLight ? '1.5px solid #e2e8f0' : '1.5px solid rgba(255,255,255,0.12)',
-                    background: 'transparent',
-                    color: isLight ? '#64748b' : 'rgba(255,255,255,0.6)',
-                    cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'border-color 0.2s, color 0.2s',
-                  }}
                 >
-                  <span className='jd-scroll-icon'>
-                    <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'>
-                      <path d='M0 0h24v24H0z' fill='none' />
-                      <g fill='none'>
-                        <path fill='currentColor' d='M12.75 4a.75.75 0 0 0-1.5 0zm-1.5 0v16h1.5V4z' opacity='.5' />
-                        <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='1.5' d='m18 14l-6 6l-6-6' />
-                      </g>
-                    </svg>
-                  </span>
+                  View Similar Job
                 </button>
               )}
             </div>

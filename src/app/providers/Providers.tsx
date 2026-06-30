@@ -41,9 +41,13 @@ function ThemeSyncInner() {
 export default function Providers({
   children,
   session,
+  initialHasSession,
 }: {
   children: React.ReactNode;
   session?: Session | null;
+  // Server-read cookie-presence signal, forwarded to ReactQueryProvider so the
+  // `has-session` query is seeded on first render (see ReactQueryProvider).
+  initialHasSession?: boolean;
 }) {
   useEffect(() => {
     if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
@@ -53,7 +57,7 @@ export default function Providers({
 
   return (
     <ThemeProvider>
-      <ReactQueryProvider>
+      <ReactQueryProvider initialHasSession={initialHasSession}>
         <SessionBoundary session={session}>
           <AuthProvider>
             <ThemeSync />
