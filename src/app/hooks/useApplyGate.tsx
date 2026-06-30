@@ -86,14 +86,14 @@ export function useApplyGate() {
       isOpen={gateState.open}
       onClose={closeGate}
       onConfirm={handleConfirm}
-      title="Generate your CV first"
+      title="Generate your Profile Summary first"
       message={
         <>
-          You need an AI-generated CV before {verb}{" "}
+          You need an AI-generated Profile Summary before {verb}{" "}
           <strong>{gateState.jobTitle || "this job"}</strong>. Generate one now?
         </>
       }
-      confirmText="Generate CV"
+      confirmText="Generate Profile Summary"
       cancelText="Not now"
     />
   );

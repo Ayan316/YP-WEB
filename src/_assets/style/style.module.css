@@ -567,4 +567,33 @@
   }
 }
 
+@keyframes navAvatarShimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.navAvatarSkeleton {
+  /* Must match the loaded avatar's rendered size (.profile_image = 50px).
+     The nav container's height tracks its tallest child (the avatar), and the
+     active-tab underline is anchored to that container's bottom. A taller
+     skeleton makes the container 8px taller on refresh, which pushes the
+     underline away from the nav text until the avatar loads (visual gap bug). */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(160, 174, 192, 0.1) 25%,
+    rgba(160, 174, 192, 0.2) 50%,
+    rgba(160, 174, 192, 0.1) 75%
+  );
+  background-size: 1000px 100%;
+  animation: navAvatarShimmer 2s infinite;
+}
+
 

@@ -622,7 +622,7 @@ export default function SummaryGeneratorModal ({
 
     const t = setTimeout(() => {
       const name = userName || 'there'
-      const greeting = `Hi ${name}! ✨ I'm Dan AI, your personal CV builder.\n\nI'll ask you ${TOTAL} quick questions to craft your personalised CV profile. Let's get started!`;
+      const greeting = `Hi ${name}! ✨ I'm Dan AI, your personal profile summary builder.\n\nI'll ask you ${TOTAL} quick questions to craft your personalised profile summary. Let's get started!`;
       addAiMessage(greeting, () => setGreetingShown(true))
     }, 400)
 
@@ -1606,8 +1606,8 @@ export default function SummaryGeneratorModal ({
           resetState()
           onClose()
         }}
-        title='CV Not Saved'
-        message={`Your AI CV hasn't been saved to your profile. Close anyway?`}
+        title='Profile Summary Not Saved'
+        message={`Your profile summary hasn't been saved to your profile. Close anyway?`}
         confirmText='Discard'
         cancelText='Close'
       />
@@ -1664,14 +1664,14 @@ export default function SummaryGeneratorModal ({
           setShowGenerateConfirm(false)
           if (pendingGenerateAnswers) {
             addAiMessage(
-              '🚀 Analyzing your responses and crafting your personalized summary...',
+              '🚀 Analyzing your responses and crafting your personalized profile summary...',
               () => runGeneration(pendingGenerateAnswers)
             )
             setPendingGenerateAnswers(null)
           }
         }}
         title='Generate Profile Summary with Dan AI?'
-        message='Dan AI will analyse your answers and craft your personalised CV summary. Would you like to proceed?'
+        message='Dan AI will analyse your answers and craft your personalised profile summary. Would you like to proceed?'
         confirmText='Generate'
         cancelText='Cancel'
       />

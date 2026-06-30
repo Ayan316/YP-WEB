@@ -1,5 +1,5 @@
 'use client'
-import { MapPin, Info, User, Send, ExternalLink, Bookmark, BookmarkCheck, ChevronDown, Check } from 'lucide-react'
+import { MapPin, Info, User, Send, ExternalLink, Bookmark, ChevronDown, Check } from 'lucide-react'
 import BuildingIcon from '@/_assets/icons/header_icons/clarity_building-solid.svg'
 import styles from '../../moduleCss/jobDetails.module.css'
 import Image from 'next/image'
@@ -636,7 +636,7 @@ export default function JobDetails ({ jobId }: Props) {
               >
                 {savingJobIds.has(jobId) || unsavingJobIds.has(jobId)
                   ? <span style={{ width: 16, height: 16, border: '2px solid currentColor', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-                  : isSavedFlag(job?.data?.saved_jobs) ? <BookmarkCheck size={18} /> : <Bookmark size={18} />}
+                  : isSavedFlag(job?.data?.saved_jobs) ? <Bookmark size={18} fill="currentColor" /> : <Bookmark size={18} />}
               </button>
 
               {/* View Similar Jobs — bouncing arrow */}

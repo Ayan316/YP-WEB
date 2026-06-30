@@ -123,7 +123,7 @@ function renderMarkdown(text: string, accentColor: string, isLight = false) {
   if (!text)
     return (
       <p style={{ fontSize: "13px", color: "#475569", margin: 0 }}>
-        Build Your CV with Dan AI
+        Build Your Profile Summary with Dan AI
       </p>
     );
   const textColor = isLight ? "#888888" : "#94a3b8";
@@ -481,7 +481,7 @@ function EmptyState({ onGenerate }: { onGenerate: () => void }) {
           marginBottom: "6px",
         }}
       >
-        Build Your CV with Dan AI
+        Build Your Profile Summary with Dan AI
       </p>
       <p
         style={{
@@ -493,7 +493,7 @@ function EmptyState({ onGenerate }: { onGenerate: () => void }) {
       >
         Answer 10 quick questions and let Dan AI craft your
         <br />
-        professional CV.
+        professional profile summary.
       </p>
       <button
         onClick={onGenerate}

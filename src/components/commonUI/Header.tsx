@@ -83,11 +83,13 @@ import ConfirmModal from "./ConfirmModal";
 import { deleteAccount } from "@/services/auth.services";
 import { useAuthGate } from "@/app/hooks/useAuthGate";
 
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
+
 export default function Header() {
   const { data: session, status: sessionStatus } = useSession();
   const { data: hasSession } = useHasSession();
   const [cookieUser, setCookieUser] = useState<any>(null);
-  const [pathname, setPathname] = React.useState("/home");
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -142,6 +144,7 @@ export default function Header() {
   };
 
   const normalizedPath = getNormalizedPath(currentPathname);
+  const [pathname, setPathname] = React.useState(normalizedPath);
 
   const { hasPending: hasPendingConnections } = useHasPendingConnections(normalizedPath === "/connections");
   const { hasUnseen: hasUnseenNotifications, unreadCount: unreadNotificationCount } = useHasUnseenNotifications();
@@ -160,6 +163,7 @@ export default function Header() {
     !!userProfile?.data?.id;
   // While the signals are still loading we don't yet KNOW the user is anonymous.
   const isResolving = sessionStatus === "loading" && hasSession === undefined;
+  const showAvatarSkeleton = isResolving || (isAuthenticated && userProfileLoading);
 
   // Build the auth URL (already carries ?callbackUrl=<safe-path> when worth
   // preserving) and append the tab param. Same helper pattern as useAuthGate.
@@ -172,6 +176,7 @@ export default function Header() {
   const navRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const navContainerRef = useRef<HTMLDivElement | null>(null);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+  const [indicatorAnimate, setIndicatorAnimate] = useState(false);
 
   // Navigation items configuration
   const navigationItems = [
@@ -302,7 +307,7 @@ export default function Header() {
     };
   }, [debouncedSearchQuery, currentPathname, router]);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const updateIndicator = () => {
       const activeRef = navRefs.current[pathname];
       const container = navContainerRef.current;
@@ -325,10 +330,19 @@ export default function Header() {
     // otherwise stay under the wrong item. Recompute when fonts are ready and
     // whenever the nav container's layout changes.
     let raf = 0;
+    let enableRaf = 0;
+    const enableAnimation = () => {
+      enableRaf = requestAnimationFrame(() => setIndicatorAnimate(true));
+    };
     if (typeof document !== "undefined" && document.fonts?.ready) {
       document.fonts.ready.then(() => {
-        raf = requestAnimationFrame(updateIndicator);
+        raf = requestAnimationFrame(() => {
+          updateIndicator();
+          enableAnimation();
+        });
       });
+    } else {
+      enableAnimation();
     }
 
     const container = navContainerRef.current;
@@ -344,6 +358,7 @@ export default function Header() {
       window.removeEventListener("resize", updateIndicator);
       if (ro) ro.disconnect();
       if (raf) cancelAnimationFrame(raf);
+      if (enableRaf) cancelAnimationFrame(enableRaf);
     };
   }, [pathname, isLight, visibleNavItems.length]);
 
@@ -1052,15 +1067,16 @@ export default function Header() {
                         style={{
                           left: `${indicatorStyle.left}px`,
                           width: `${indicatorStyle.width}px`,
+                          transition: indicatorAnimate ? undefined : "none",
                         }}
                       />
                     )}
 
                   <div className={styles.profile_icon_area_main}>
-                    {isResolving ? (
+                    {showAvatarSkeleton ? (
                       // Neutral placeholder while the auth signal resolves — avoids
                       // flashing the wrong (logged-in vs anonymous) UI.
-                      <div style={{ width: 58, height: 58 }} aria-hidden="true" />
+                      <div className={styles.navAvatarSkeleton} aria-hidden="true" />
                     ) : (
                       // Both logged-in and anonymous visitors get the profile
                       // dropdown; it renders the correct variant (default photo +

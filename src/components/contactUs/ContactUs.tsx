@@ -21,7 +21,7 @@ import { submitContactUs } from '@/services/contactus.services'
 const MESSAGE_LIMIT = 450
 
 const contactInfo = {
-  email: 'info@youngprofessionals.global',
+  email: 'info@young-professionals.uk',
   addressLine1: 'Young Professionals UK — Inspiring a New Generation Ltd',
   addressLine2: '6 Bevis Marks, City of London, London EC3A 7BA, UK',
 }
