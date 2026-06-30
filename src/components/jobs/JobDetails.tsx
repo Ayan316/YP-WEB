@@ -567,6 +567,9 @@ export default function JobDetails ({ jobId }: Props) {
               background: isLight ? 'transparent' : '',
               position: 'relative',
               padding: '24px',
+              display: 'flex',
+              gap: 20,
+              alignItems: 'flex-start',
             }}
           >
             {/* Bounce + tooltip keyframes */}
@@ -604,7 +607,7 @@ export default function JobDetails ({ jobId }: Props) {
                 Save (icon) → Apply (text) → View Similar Job (text). */}
             <div
               className={styles.jobDetails_header_actions}
-              style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 20, zIndex: 2 }}
+              style={{ position: 'static', order: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 20, zIndex: 2 }}
             >
               {/* Save / Unsave — icon button (kept as-is) */}
               <button
@@ -664,7 +667,7 @@ export default function JobDetails ({ jobId }: Props) {
             </div>
 
             {/* Logo + Info — stacked layout */}
-            <div className={styles.jobDetails_header_main} style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+            <div className={styles.jobDetails_header_main} style={{ display: 'flex', gap: 20, alignItems: 'flex-start', flex: 1, minWidth: 0, order: 1 }}>
               <div className={styles.jobDetails_job_item_logo} style={{ flexShrink: 0 }}>
                 <LogoWithFallback
                   src={job?.data?.company_color_url || job?.data?.company_logo_url}
