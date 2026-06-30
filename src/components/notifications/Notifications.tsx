@@ -847,6 +847,7 @@ const Notifications = () => {
                                         fontWeight: isUnread ? 700 : 500,
                                         whiteSpace: "nowrap",
                                         flexShrink: 0,
+                                        width: "auto",
                                         overflow: "visible",
                                         textOverflow: "clip",
                                       }}
@@ -859,6 +860,9 @@ const Notifications = () => {
                                     style={{
                                       color: isLight ? "#040F1F" : "",
                                       fontWeight: isUnread ? 700 : 500,
+                                      width: "auto",
+                                      flex: "1 1 auto",
+                                      minWidth: 0,
                                     }}
                                   >
                                     {notification.title}
@@ -874,6 +878,11 @@ const Notifications = () => {
                                     style={{
                                       color: isLight ? "#888888" : "",
                                       opacity: isUnread ? 1 : 0.85,
+                                      display: "-webkit-box",
+                                      WebkitLineClamp: 2,
+                                      WebkitBoxOrient: "vertical",
+                                      overflow: "hidden",
+                                      textOverflow: "ellipsis",
                                     }}
                                   >
                                     {notification.message}
